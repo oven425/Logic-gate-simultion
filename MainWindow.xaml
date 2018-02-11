@@ -7,7 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid x:Name="grid">
-        <Canvas x:Name="canvas" Background="Transparent" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="button_save" Click="button_save_Click">Save</Button>
+            <Button x:Name="button_load" Click="button_load_Click">Load</Button>
+        </StackPanel>
+        <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp"/>
 
     </Grid>
 </Window>

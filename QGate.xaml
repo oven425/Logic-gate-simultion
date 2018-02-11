@@ -12,10 +12,10 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <ItemsControl ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
+        <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Rectangle Fill="White" MouseDown="Rectangle_MouseDown" PreviewMouseUp="Rectangle_PreviewMouseUp" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1"/>
+                    <Rectangle Fill="White" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
@@ -26,7 +26,7 @@
         </ItemsControl>
         <Rectangle Fill="Wheat" Grid.Column="1" Stroke="Black" StrokeThickness="1"/>
         <TextBlock Text="{Binding GateName}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ItemsControl ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
+        <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Rectangle Fill="White" Stroke="Black" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Height="10" Width="10" StrokeThickness="1"/>
