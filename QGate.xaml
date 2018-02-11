@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_LogicSimulation"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" LayoutUpdated="UserControl_LayoutUpdated">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -15,7 +15,8 @@
         <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Rectangle Fill="White" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1"/>
+                    <Rectangle x:Name="rectangle" Fill="White" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1">
+                    </Rectangle>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
