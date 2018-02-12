@@ -30,7 +30,7 @@
         <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Rectangle Fill="White" Stroke="Black" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Height="10" Width="10" StrokeThickness="1"/>
+                    <Rectangle x:Name="rectangle" Fill="White" Stroke="Black" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Height="10" Width="10" StrokeThickness="1"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

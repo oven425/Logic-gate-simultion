@@ -104,14 +104,26 @@ namespace WPF_LogicSimulation
             {
                 ContentPresenter container = this.itemscontrol_in.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
                 container.ApplyTemplate();
-                object oo = container.ContentTemplate.FindName("rectangle", container);
-
+                FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
+                CQPin pin = oo.DataContext as CQPin;
+                this.GetPinLocation(pin, oo);
             }
-
+            for (int i = 0; i < this.itemscontrol_out.Items.Count; i++)
+            {
+                ContentPresenter container = this.itemscontrol_out.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
+                container.ApplyTemplate();
+                FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
+                CQPin pin = oo.DataContext as CQPin;
+                this.GetPinLocation(pin, oo);
+            }
+            if(this.OnGateMove != null)
+            {
+                this.OnGateMove(this, new List<CQPin>(), new List<CQPin>());
+            }
             return result;
         }
 
-        Point GetPinLocation(CQPin pin, Rectangle rectangle)
+        Point GetPinLocation(CQPin pin, FrameworkElement rectangle)
         {
             UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
             Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
@@ -123,6 +135,8 @@ namespace WPF_LogicSimulation
             {
                 relativeLocation.X = relativeLocation.X + rectangle.Width;
             }
+            relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
+            pin.ConnectPoint = relativeLocation;
             return relativeLocation;
         }
 
@@ -130,20 +144,21 @@ namespace WPF_LogicSimulation
         {
             Rectangle rectangle = sender as Rectangle;
             CQPin pin = rectangle.DataContext as CQPin;
-            UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
-            Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
-            if (pin.Type == CQPin.Types.IN)
-            {
-                relativeLocation.X = relativeLocation.X;
-            }
-            else
-            {
-                relativeLocation.X = relativeLocation.X+ rectangle.Width;
-            }
-            relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
+            this.GetPinLocation(pin, rectangle);
+            //UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
+            //Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
+            //if (pin.Type == CQPin.Types.IN)
+            //{
+            //    relativeLocation.X = relativeLocation.X;
+            //}
+            //else
+            //{
+            //    relativeLocation.X = relativeLocation.X+ rectangle.Width;
+            //}
+            //relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
             if (this.OnPinMouseDwon != null)
             {
-                this.OnPinMouseDwon(this, pin, relativeLocation);
+                this.OnPinMouseDwon(this, pin, new Point());
             }
             e.Handled = true;
         }
@@ -151,23 +166,23 @@ namespace WPF_LogicSimulation
         private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement rectangle = sender as FrameworkElement;
-            CQPin ping = rectangle.DataContext as CQPin;
-
-            UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
-            Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
-            if(ping.Type == CQPin.Types.IN)
-            {
-                relativeLocation.X = relativeLocation.X;
-            }
-            else
-            {
-                relativeLocation.X = relativeLocation.X + rectangle.Width;
-            }
+            CQPin pin = rectangle.DataContext as CQPin;
+            this.GetPinLocation(pin, rectangle);
+            //UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
+            //Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
+            //if(ping.Type == CQPin.Types.IN)
+            //{
+            //    relativeLocation.X = relativeLocation.X;
+            //}
+            //else
+            //{
+            //    relativeLocation.X = relativeLocation.X + rectangle.Width;
+            //}
             
-            relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
+            //relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
             if (this.OnPinMouseUp != null)
             {
-                this.OnPinMouseUp(this, ping, relativeLocation);
+                this.OnPinMouseUp(this, pin, new Point());
             }
             e.Handled = true;
         }
@@ -207,5 +222,6 @@ namespace WPF_LogicSimulation
         }
         public Types Type { set; get; }
         public int Index { set; get; }
+        public Point ConnectPoint { set; get; }
     }
 }

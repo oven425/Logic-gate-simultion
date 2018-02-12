@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Shapes;
 using System.Xml.Serialization;
 
 namespace WPF_LogicSimulation
@@ -45,6 +46,7 @@ namespace WPF_LogicSimulation
 
     public class CQSaveFile_Line
     {
+        public Line Line { set; get; }
         public CQSaveFile_LinePoint Begin { set; get; }
         public CQSaveFile_LinePoint End { set; get; }
         public CQSaveFile_Line()
