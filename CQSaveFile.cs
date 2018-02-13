@@ -42,10 +42,18 @@ namespace WPF_LogicSimulation
         public int Index { set; get; }
         [XmlAttribute("Type")]
         public CQPin.Types Type { set; get; }
+        public enum EndTypes
+        {
+            Start,
+            End
+        }
+        [XmlAttribute("EndType")]
+        public EndTypes EndType { set; get; }
     }
 
     public class CQSaveFile_Line
     {
+        [XmlIgnore]
         public Line Line { set; get; }
         public CQSaveFile_LinePoint Begin { set; get; }
         public CQSaveFile_LinePoint End { set; get; }

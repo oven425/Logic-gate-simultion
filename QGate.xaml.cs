@@ -26,7 +26,7 @@ namespace WPF_LogicSimulation
         public event PinMouseDwonDelegate OnPinMouseDwon;
         public delegate bool PinMouseUpDelegate(QGate sender, CQPin pin, Point pt);
         public event PinMouseUpDelegate OnPinMouseUp;
-        public delegate bool GateMoveDelegate(QGate gate, List<CQPin> pins_in, List<CQPin> pins_out);
+        public delegate bool GateMoveDelegate(QGate gate);
         public event GateMoveDelegate OnGateMove;
         public string ID
         {
@@ -100,13 +100,16 @@ namespace WPF_LogicSimulation
         public bool RefreshLocation()
         {
             bool result = true;
-            for(int i=0; i<this.itemscontrol_in.Items.Count; i++)
+            //List<CQPin> pin_in = new List<CQPin>();
+            //List<CQPin> pin_out = new List<CQPin>();
+            for (int i=0; i<this.itemscontrol_in.Items.Count; i++)
             {
                 ContentPresenter container = this.itemscontrol_in.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
                 container.ApplyTemplate();
                 FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
                 CQPin pin = oo.DataContext as CQPin;
                 this.GetPinLocation(pin, oo);
+                //pin_in.Add(pin);
             }
             for (int i = 0; i < this.itemscontrol_out.Items.Count; i++)
             {
@@ -115,10 +118,13 @@ namespace WPF_LogicSimulation
                 FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
                 CQPin pin = oo.DataContext as CQPin;
                 this.GetPinLocation(pin, oo);
+                //pin_out.Add(pin);
             }
             if(this.OnGateMove != null)
             {
-                this.OnGateMove(this, new List<CQPin>(), new List<CQPin>());
+                
+
+                this.OnGateMove(this);
             }
             return result;
         }

@@ -41,6 +41,7 @@ namespace WPF_LogicSimulation
             this.m_LineDatas[this.m_Line].End.GateID = sender.ID;
             this.m_LineDatas[this.m_Line].End.Index = pin.Index;
             this.m_LineDatas[this.m_Line].End.Type = pin.Type;
+            this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
             //this.m_Line = null;
             this.m_IsConnect = false;
             return true;
@@ -58,7 +59,7 @@ namespace WPF_LogicSimulation
             CQSaveFile_Line save_line = new CQSaveFile_Line() { Line = this.m_Line };
             if (this.m_LineDatas.ContainsKey(save_line.Line) == false)
             {
-                this.m_LineDatas.Add(save_line.Line, new CQSaveFile_Line());
+                this.m_LineDatas.Add(save_line.Line, save_line);
             }
             else
             {
@@ -67,6 +68,8 @@ namespace WPF_LogicSimulation
             this.m_LineDatas[this.m_Line].Begin.GateID = sender.ID;
             this.m_LineDatas[this.m_Line].Begin.Index = pin.Index;
             this.m_LineDatas[this.m_Line].Begin.Type = pin.Type;
+            
+            this.m_LineDatas[this.m_Line].Begin.EndType = CQSaveFile_LinePoint.EndTypes.Start;
             this.canvas.Children.Add(this.m_Line);
             return true;
         }
@@ -77,8 +80,8 @@ namespace WPF_LogicSimulation
             QGate ggate = null;
             cc = new CQGateUI();
             cc.GateName = "AND";
-            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN });
-            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN });
+            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index=0 });
+            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index=1 });
             cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
             ggate = new QGate();
             ggate.Height = 50;
@@ -94,15 +97,109 @@ namespace WPF_LogicSimulation
             
         }
 
-        private bool Ggate_OnGateMove(QGate gate, List<CQPin> pins_in, List<CQPin> pins_out)
+        void ChangeLine(QGate gate)
         {
             CQGateUI gateui = gate.DataContext as CQGateUI;
-            if(gateui != null)
+            if (gateui != null)
             {
-                var vv = this.m_LineDatas.Values.Where(x => x.Begin.GateID == gate.ID);
-                
-                
+                var vv = this.m_LineDatas.Values.FirstOrDefault(x => x.Begin.GateID == gate.ID);
+                if (vv != null)
+                {
+                    switch (vv.Begin.EndType)
+                    {
+                        case CQSaveFile_LinePoint.EndTypes.Start:
+                            {
+                                switch (vv.Begin.Type)
+                                {
+                                    case CQPin.Types.IN:
+                                        {
+                                            vv.Line.X1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
+                                            vv.Line.Y1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                    case CQPin.Types.OUT:
+                                        {
+                                            vv.Line.X1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
+                                            vv.Line.Y1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case CQSaveFile_LinePoint.EndTypes.End:
+                            {
+                                switch (vv.Begin.Type)
+                                {
+                                    case CQPin.Types.IN:
+                                        {
+                                            vv.Line.X2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
+                                            vv.Line.Y2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                    case CQPin.Types.OUT:
+                                        {
+                                            vv.Line.X2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
+                                            vv.Line.Y2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                }
+
+                vv = this.m_LineDatas.Values.FirstOrDefault(x => x.End.GateID == gate.ID);
+                if (vv != null)
+                {
+                    switch (vv.End.EndType)
+                    {
+                        case CQSaveFile_LinePoint.EndTypes.Start:
+                            {
+                                switch (vv.End.Type)
+                                {
+                                    case CQPin.Types.IN:
+                                        {
+                                            vv.Line.X1 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
+                                            vv.Line.Y1 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                    case CQPin.Types.OUT:
+                                        {
+                                            vv.Line.X1 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
+                                            vv.Line.Y1 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case CQSaveFile_LinePoint.EndTypes.End:
+                            {
+                                switch (vv.End.Type)
+                                {
+                                    case CQPin.Types.IN:
+                                        {
+                                            vv.Line.X2 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
+                                            vv.Line.Y2 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                    case CQPin.Types.OUT:
+                                        {
+                                            vv.Line.X2 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
+                                            vv.Line.Y2 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                }
+
             }
+        }
+
+        private bool Ggate_OnGateMove(QGate gate)
+        {
+            this.ChangeLine(gate);
             return true;
         }
 
@@ -205,7 +302,23 @@ namespace WPF_LogicSimulation
                 {
                     this.Add_AND(gate.X, gate.Y, gate.ID);
                 }
+                foreach(CQSaveFile_Line line in sv.Lines)
+                {
+                    line.Line = new Line();
+                    this.m_LineDatas.Add(line.Line, line);
+                    this.canvas.Children.Add(line.Line);
+                }
+                foreach(var child in this.canvas.Children)
+                {
+                    if(child is QGate)
+                    {
+                        QGate gate = child as QGate;
+                        gate.RefreshLocation();
+                        this.ChangeLine(child as QGate);
+                    }
+                }
             }
+
         }
     }
 }
