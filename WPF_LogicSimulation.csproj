@@ -52,6 +52,9 @@
     <Compile Include="QGate.xaml.cs">
       <DependentUpon>QGate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="QInput_Switch.xaml.cs">
+      <DependentUpon>QInput_Switch.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,6 +68,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="QGate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="QInput_Switch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

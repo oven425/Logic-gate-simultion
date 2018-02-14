@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\
+C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Release\
 WPF_LogicSimulation
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\App.xaml
 31731344170
 
@@ -16,5 +16,5 @@ C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\App.xaml
 10-486943014
 MainWindow.xaml;QGate.xaml;QInput_Switch.xaml;
 
-False
+True
 

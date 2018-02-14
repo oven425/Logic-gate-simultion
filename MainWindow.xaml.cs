@@ -31,6 +31,7 @@ namespace WPF_LogicSimulation
         {
             this.Add_AND(0, 0, "");
             this.Add_AND(0, 0, "");
+            this.Add_AND(0, 0, "");
         }
         bool m_IsConnect;
         Line m_Line;
@@ -102,96 +103,102 @@ namespace WPF_LogicSimulation
             CQGateUI gateui = gate.DataContext as CQGateUI;
             if (gateui != null)
             {
-                var vv = this.m_LineDatas.Values.FirstOrDefault(x => x.Begin.GateID == gate.ID);
-                if (vv != null)
+                var vv1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == gate.ID);
+                if (vv1 != null)
                 {
-                    switch (vv.Begin.EndType)
+                    foreach(var vv in vv1)
                     {
-                        case CQSaveFile_LinePoint.EndTypes.Start:
-                            {
-                                switch (vv.Begin.Type)
+                        switch (vv.Begin.EndType)
+                        {
+                            case CQSaveFile_LinePoint.EndTypes.Start:
                                 {
-                                    case CQPin.Types.IN:
-                                        {
-                                            vv.Line.X1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
-                                            vv.Line.Y1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
-                                        }
-                                        break;
-                                    case CQPin.Types.OUT:
-                                        {
-                                            vv.Line.X1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
-                                            vv.Line.Y1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
-                                        }
-                                        break;
+                                    switch (vv.Begin.Type)
+                                    {
+                                        case CQPin.Types.IN:
+                                            {
+                                                vv.Line.X1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
+                                                vv.Line.Y1 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                        case CQPin.Types.OUT:
+                                            {
+                                                vv.Line.X1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
+                                                vv.Line.Y1 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                    }
                                 }
-                            }
-                            break;
-                        case CQSaveFile_LinePoint.EndTypes.End:
-                            {
-                                switch (vv.Begin.Type)
+                                break;
+                            case CQSaveFile_LinePoint.EndTypes.End:
                                 {
-                                    case CQPin.Types.IN:
-                                        {
-                                            vv.Line.X2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
-                                            vv.Line.Y2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
-                                        }
-                                        break;
-                                    case CQPin.Types.OUT:
-                                        {
-                                            vv.Line.X2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
-                                            vv.Line.Y2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
-                                        }
-                                        break;
+                                    switch (vv.Begin.Type)
+                                    {
+                                        case CQPin.Types.IN:
+                                            {
+                                                vv.Line.X2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.X;
+                                                vv.Line.Y2 = gateui.Pin_in[vv.Begin.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                        case CQPin.Types.OUT:
+                                            {
+                                                vv.Line.X2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.X;
+                                                vv.Line.Y2 = gateui.Pin_out[vv.Begin.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                    }
                                 }
-                            }
-                            break;
+                                break;
+                        }
                     }
                 }
-
-                vv = this.m_LineDatas.Values.FirstOrDefault(x => x.End.GateID == gate.ID);
-                if (vv != null)
+                vv1 = this.m_LineDatas.Values.Where(x => x.End.GateID == gate.ID);
+                if (vv1 != null)
                 {
-                    switch (vv.End.EndType)
+                    foreach(var vv in vv1)
                     {
-                        case CQSaveFile_LinePoint.EndTypes.Start:
-                            {
-                                switch (vv.End.Type)
+                        switch (vv.End.EndType)
+                        {
+                            case CQSaveFile_LinePoint.EndTypes.Start:
                                 {
-                                    case CQPin.Types.IN:
-                                        {
-                                            vv.Line.X1 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
-                                            vv.Line.Y1 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
-                                        }
-                                        break;
-                                    case CQPin.Types.OUT:
-                                        {
-                                            vv.Line.X1 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
-                                            vv.Line.Y1 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
-                                        }
-                                        break;
+                                    switch (vv.End.Type)
+                                    {
+                                        case CQPin.Types.IN:
+                                            {
+                                                vv.Line.X1 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
+                                                vv.Line.Y1 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                        case CQPin.Types.OUT:
+                                            {
+                                                vv.Line.X1 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
+                                                vv.Line.Y1 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                    }
                                 }
-                            }
-                            break;
-                        case CQSaveFile_LinePoint.EndTypes.End:
-                            {
-                                switch (vv.End.Type)
+                                break;
+                            case CQSaveFile_LinePoint.EndTypes.End:
                                 {
-                                    case CQPin.Types.IN:
-                                        {
-                                            vv.Line.X2 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
-                                            vv.Line.Y2 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
-                                        }
-                                        break;
-                                    case CQPin.Types.OUT:
-                                        {
-                                            vv.Line.X2 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
-                                            vv.Line.Y2 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
-                                        }
-                                        break;
+                                    switch (vv.End.Type)
+                                    {
+                                        case CQPin.Types.IN:
+                                            {
+                                                vv.Line.X2 = gateui.Pin_in[vv.End.Index].ConnectPoint.X;
+                                                vv.Line.Y2 = gateui.Pin_in[vv.End.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                        case CQPin.Types.OUT:
+                                            {
+                                                vv.Line.X2 = gateui.Pin_out[vv.End.Index].ConnectPoint.X;
+                                                vv.Line.Y2 = gateui.Pin_out[vv.End.Index].ConnectPoint.Y;
+                                            }
+                                            break;
+                                    }
                                 }
-                            }
-                            break;
+                                break;
+                        }
                     }
+                    
                 }
 
             }
@@ -305,9 +312,15 @@ namespace WPF_LogicSimulation
                 foreach(CQSaveFile_Line line in sv.Lines)
                 {
                     line.Line = new Line();
+                    line.Line.Fill = Brushes.Gray;
+                    //this.m_Line.X1 = this.m_Line.X2 = pin.ConnectPoint.X;
+                    //this.m_Line.Y1 = this.m_Line.Y2 = pin.ConnectPoint.Y;
+                    line.Line.Stroke = Brushes.Gray;
+                    line.Line.StrokeThickness = 1;
                     this.m_LineDatas.Add(line.Line, line);
                     this.canvas.Children.Add(line.Line);
                 }
+                this.canvas.UpdateLayout();
                 foreach(var child in this.canvas.Children)
                 {
                     if(child is QGate)
