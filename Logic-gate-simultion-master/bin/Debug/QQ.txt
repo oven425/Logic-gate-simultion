@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<AA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Gates>
+    <Gate ID="e0927258-7d34-4c08-8c80-023248ebdde6" X="92.666666666666671" Y="7.3333333333333357" />
+    <Gate ID="4be8ea8f-19ac-47d2-b174-65f9e3630430" X="90" Y="154" />
+    <Gate ID="2546ce0b-88b2-41c9-94d4-eea4363d40f6" X="282" Y="95.999999999999986" />
+  </Gates>
+  <Lines>
+    <Line>
+      <Begin GateID="4be8ea8f-19ac-47d2-b174-65f9e3630430" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="2546ce0b-88b2-41c9-94d4-eea4363d40f6" Index="1" Type="IN" EndType="End" />
+    </Line>
+    <Line>
+      <Begin GateID="e0927258-7d34-4c08-8c80-023248ebdde6" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="2546ce0b-88b2-41c9-94d4-eea4363d40f6" Index="0" Type="IN" EndType="End" />
+    </Line>
+  </Lines>
+</AA>
