@@ -32,14 +32,16 @@ namespace WPF_LogicSimulation
             this.Add_AND(0, 0, "");
             this.Add_AND(0, 0, "");
             this.Add_AND(0, 0, "");
+            this.Add_Input_Switch(0, 0, "");
         }
         bool m_IsConnect;
         Line m_Line;
         private bool Ggate_OnPinMouseUp(QGate sender, CQPin pin, Point pt)
         {
+            CQGateUI gateui = sender.DataContext as CQGateUI;
             this.m_Line.X2 = pin.ConnectPoint.X;
             this.m_Line.Y2 = pin.ConnectPoint.Y;
-            this.m_LineDatas[this.m_Line].End.GateID = sender.ID;
+            this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
             this.m_LineDatas[this.m_Line].End.Index = pin.Index;
             this.m_LineDatas[this.m_Line].End.Type = pin.Type;
             this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
@@ -50,6 +52,7 @@ namespace WPF_LogicSimulation
 
         private bool Ggate_OnPinMouseDwon(QGate sender, CQPin pin, Point pt)
         {
+            CQGateUI gateui = sender.DataContext as CQGateUI;
             this.m_Line = new Line();
             this.m_Line.Fill = Brushes.Gray;
             this.m_Line.X1 = this.m_Line.X2 = pin.ConnectPoint.X;
@@ -66,13 +69,50 @@ namespace WPF_LogicSimulation
             {
 
             }
-            this.m_LineDatas[this.m_Line].Begin.GateID = sender.ID;
+            this.m_LineDatas[this.m_Line].Begin.GateID = gateui.ID;
             this.m_LineDatas[this.m_Line].Begin.Index = pin.Index;
             this.m_LineDatas[this.m_Line].Begin.Type = pin.Type;
             
             this.m_LineDatas[this.m_Line].Begin.EndType = CQSaveFile_LinePoint.EndTypes.Start;
             this.canvas.Children.Add(this.m_Line);
             return true;
+        }
+
+        void Add_Input_Switch(double x, double y, string id)
+        {
+            CQInput_SwitchUI cc = null;
+            QInput_Switch input_switch = null;
+            cc = new CQInput_SwitchUI();
+            cc.GateName = "AND";
+            cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
+            input_switch = new QInput_Switch();
+            input_switch.Height = 50;
+            input_switch.Width = 80;
+            //input_switch.ID = id;
+            Canvas.SetLeft(input_switch, x);
+            Canvas.SetTop(input_switch, y);
+            input_switch.DataContext = cc;
+            input_switch.OnPinMouseDwon += Input_switch_OnPinMouseDwon;
+            input_switch.OnPinMouseUp += Input_switch_OnPinMouseUp;
+            input_switch.OnGateMove += Input_switch_OnGateMove;
+            this.canvas.Children.Add(input_switch);
+
+        }
+
+        private bool Input_switch_OnGateMove(QInput_Switch gate)
+        {
+            this.ChangeLine(gate);
+            return true;
+        }
+
+        private bool Input_switch_OnPinMouseUp(QInput_Switch sender, CQPin pin, Point pt)
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool Input_switch_OnPinMouseDwon(QInput_Switch sender, CQPin pin, Point pt)
+        {
+            throw new NotImplementedException();
         }
 
         void Add_AND(double x, double y, string id)
@@ -87,7 +127,7 @@ namespace WPF_LogicSimulation
             ggate = new QGate();
             ggate.Height = 50;
             ggate.Width = 80;
-            ggate.ID = id;
+            cc.ID = id;
             Canvas.SetLeft(ggate, x);
             Canvas.SetTop(ggate, y);
             ggate.DataContext = cc;
@@ -98,12 +138,12 @@ namespace WPF_LogicSimulation
             
         }
 
-        void ChangeLine(QGate gate)
+        void ChangeLine(FrameworkElement gate)
         {
-            CQGateUI gateui = gate.DataContext as CQGateUI;
+            CQGateBaseUI gateui = gate.DataContext as CQGateBaseUI;
             if (gateui != null)
             {
-                var vv1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == gate.ID);
+                var vv1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == gateui.ID);
                 if (vv1 != null)
                 {
                     foreach(var vv in vv1)
@@ -151,7 +191,7 @@ namespace WPF_LogicSimulation
                         }
                     }
                 }
-                vv1 = this.m_LineDatas.Values.Where(x => x.End.GateID == gate.ID);
+                vv1 = this.m_LineDatas.Values.Where(x => x.End.GateID == gateui.ID);
                 if (vv1 != null)
                 {
                     foreach(var vv in vv1)
@@ -213,6 +253,7 @@ namespace WPF_LogicSimulation
         bool m_IsDrag = false;
         QGate m_DragGate;
         Point m_DragOffset;
+        QInput_Switch m_DragInputSwitch;
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.Source is QGate)
@@ -222,6 +263,13 @@ namespace WPF_LogicSimulation
                 this.m_DragOffset = e.GetPosition(this.m_DragGate);
                 this.canvas.CaptureMouse();
             }
+            else if(e.Source is QInput_Switch)
+            {
+                this.m_DragInputSwitch = e.Source as QInput_Switch;
+                this.m_IsDrag = true;
+                this.m_DragOffset = e.GetPosition(this.m_DragInputSwitch);
+                this.canvas.CaptureMouse();
+            }
         }
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
@@ -229,9 +277,19 @@ namespace WPF_LogicSimulation
             if(this.m_IsDrag == true)
             {
                 Point pt = e.GetPosition(this.canvas);
-                Canvas.SetLeft(this.m_DragGate, pt.X - this.m_DragOffset.X);
-                Canvas.SetTop(this.m_DragGate, pt.Y - this.m_DragOffset.Y);
-                this.m_DragGate.RefreshLocation();
+                if(this.m_DragGate != null)
+                {
+                    Canvas.SetLeft(this.m_DragGate, pt.X - this.m_DragOffset.X);
+                    Canvas.SetTop(this.m_DragGate, pt.Y - this.m_DragOffset.Y);
+                    this.m_DragGate.RefreshLocation();
+                }
+                else if(this.m_DragInputSwitch != null)
+                {
+                    Canvas.SetLeft(this.m_DragInputSwitch, pt.X - this.m_DragOffset.X);
+                    Canvas.SetTop(this.m_DragInputSwitch, pt.Y - this.m_DragOffset.Y);
+                    this.m_DragInputSwitch.RefreshLocation();
+                }
+                
             }
             else if(this.m_IsConnect == true)
             {
@@ -262,6 +320,8 @@ namespace WPF_LogicSimulation
             {
                 this.m_IsDrag = false;
                 this.canvas.ReleaseMouseCapture();
+                this.m_DragGate = null;
+                this.m_DragInputSwitch = null;
             }
         }
 
@@ -275,7 +335,8 @@ namespace WPF_LogicSimulation
                 if(gate != null)
                 {
                     CQSaveFile_Gate sg = new CQSaveFile_Gate();
-                    sg.ID = gate.ID;
+                    CQGateUI gateui = gate.DataContext as CQGateUI;
+                    sg.ID = gateui.ID;
                     sg.X = Canvas.GetLeft(gate);
                     sg.Y= Canvas.GetTop(gate);
                     sv.Gates.Add(sg);

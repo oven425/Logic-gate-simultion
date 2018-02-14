@@ -28,19 +28,7 @@ namespace WPF_LogicSimulation
         public event PinMouseUpDelegate OnPinMouseUp;
         public delegate bool GateMoveDelegate(QGate gate);
         public event GateMoveDelegate OnGateMove;
-        public string ID
-        {
-            set { this.m_ID = value; }
-            get
-            {
-                if(string.IsNullOrEmpty(this.m_ID) == true)
-                {
-                    this.m_ID = Guid.NewGuid().ToString();
-                }
-                return this.m_ID;
-            }
-        }
-        string m_ID;
+        
         public QGate()
         {
             InitializeComponent();
@@ -151,17 +139,6 @@ namespace WPF_LogicSimulation
             Rectangle rectangle = sender as Rectangle;
             CQPin pin = rectangle.DataContext as CQPin;
             this.GetPinLocation(pin, rectangle);
-            //UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
-            //Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
-            //if (pin.Type == CQPin.Types.IN)
-            //{
-            //    relativeLocation.X = relativeLocation.X;
-            //}
-            //else
-            //{
-            //    relativeLocation.X = relativeLocation.X+ rectangle.Width;
-            //}
-            //relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
             if (this.OnPinMouseDwon != null)
             {
                 this.OnPinMouseDwon(this, pin, new Point());
@@ -174,18 +151,6 @@ namespace WPF_LogicSimulation
             FrameworkElement rectangle = sender as FrameworkElement;
             CQPin pin = rectangle.DataContext as CQPin;
             this.GetPinLocation(pin, rectangle);
-            //UIElement container = VisualTreeHelper.GetParent(this) as UIElement;
-            //Point relativeLocation = rectangle.TranslatePoint(new Point(0, 0), container);
-            //if(ping.Type == CQPin.Types.IN)
-            //{
-            //    relativeLocation.X = relativeLocation.X;
-            //}
-            //else
-            //{
-            //    relativeLocation.X = relativeLocation.X + rectangle.Width;
-            //}
-            
-            //relativeLocation.Y = relativeLocation.Y + rectangle.Height / 2;
             if (this.OnPinMouseUp != null)
             {
                 this.OnPinMouseUp(this, pin, new Point());
@@ -199,23 +164,35 @@ namespace WPF_LogicSimulation
         }
     }
 
-    public class CQGateUI : INotifyPropertyChanged
+    public class CQGateBaseUI : INotifyPropertyChanged
     {
         public ObservableCollection<CQPin> Pin_in { set; get; }
         public ObservableCollection<CQPin> Pin_out { set; get; }
         public string GateName { set; get; }
+        public string ID
+        {
+            set { this.m_ID = value; }
+            get
+            {
+                if (string.IsNullOrEmpty(this.m_ID) == true)
+                {
+                    this.m_ID = Guid.NewGuid().ToString();
+                }
+                return this.m_ID;
+            }
+        }
+        string m_ID;
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
+    }
+
+    public class CQGateUI : CQGateBaseUI
+    {
+        
         public CQGateUI()
         {
             this.Pin_in = new ObservableCollection<CQPin>();
             this.Pin_out = new ObservableCollection<CQPin>();
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        void Update(string name)
-        {
-            if(this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
         }
     }
 

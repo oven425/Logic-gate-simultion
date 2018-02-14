@@ -5,12 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_LogicSimulation"
              mc:Ignorable="d" 
+             
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Rectangle Fill="Wheat" Grid.Column="1" Stroke="Black" StrokeThickness="1"/>
+            <TextBlock Text="{Binding GateName}"/>
+            <ToggleButton x:Name="toggglebutton_switch" Grid.Row="1" Click="toggglebutton_switch_Click"/>
+        </Grid>
         
+        <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="1" HorizontalAlignment="Left">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle x:Name="rectangle" Fill="White" Stroke="Black" MouseDown="rectangle_MouseDown"  MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Height="10" Width="10" StrokeThickness="1"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="1" Columns="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Grid>
 </UserControl>
