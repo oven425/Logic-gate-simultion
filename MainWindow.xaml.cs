@@ -30,9 +30,9 @@ namespace WPF_LogicSimulation
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Add_AND(0, 0, "");
-            this.Add_AND(0, 0, "");
-            this.Add_AND(0, 0, "");
+            //this.Add_AND(0, 0, "");
+            //this.Add_AND(0, 0, "");
+            //this.Add_AND(0, 0, "");
             this.Add_Input_Switch(0, 0, "");
             this.Add_LED(0, 0, "");
         }
@@ -40,14 +40,15 @@ namespace WPF_LogicSimulation
         Line m_Line;
         private bool Ggate_OnPinMouseUp(QGate sender, CQPin pin, Point pt)
         {
-            CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
-            this.m_Line.X2 = pin.ConnectPoint.X;
-            this.m_Line.Y2 = pin.ConnectPoint.Y;
-            this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
-            this.m_LineDatas[this.m_Line].End.Index = pin.Index;
-            this.m_LineDatas[this.m_Line].End.Type = pin.Type;
-            this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            this.m_IsConnect = false;
+            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
+            //this.m_Line.X2 = pin.ConnectPoint.X;
+            //this.m_Line.Y2 = pin.ConnectPoint.Y;
+            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
+            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
+            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
+            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
+            //this.m_IsConnect = false;
+            this.ConnectEnd(sender, pin, pt);
             return true;
         }
 
@@ -109,14 +110,15 @@ namespace WPF_LogicSimulation
 
         private bool Input_switch_OnPinMouseUp(QInput_Switch sender, CQPin pin, Point pt)
         {
-            CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
-            this.m_Line.X2 = pin.ConnectPoint.X;
-            this.m_Line.Y2 = pin.ConnectPoint.Y;
-            this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
-            this.m_LineDatas[this.m_Line].End.Index = pin.Index;
-            this.m_LineDatas[this.m_Line].End.Type = pin.Type;
-            this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            this.m_IsConnect = false;
+            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
+            //this.m_Line.X2 = pin.ConnectPoint.X;
+            //this.m_Line.Y2 = pin.ConnectPoint.Y;
+            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
+            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
+            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
+            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
+            //this.m_IsConnect = false;
+            this.ConnectEnd(sender, pin, pt);
             return true;
         }
 
@@ -177,6 +179,20 @@ namespace WPF_LogicSimulation
 
         private bool Output_led_OnPinMouseUp(QOutput_LED sender, CQPin pin, Point pt)
         {
+            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
+            //this.m_Line.X2 = pin.ConnectPoint.X;
+            //this.m_Line.Y2 = pin.ConnectPoint.Y;
+            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
+            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
+            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
+            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
+            //this.m_IsConnect = false;
+            this.ConnectEnd(sender, pin, pt);
+            return true;
+        }
+
+        void ConnectEnd(FrameworkElement sender, CQPin pin, Point pt)
+        {
             CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
             this.m_Line.X2 = pin.ConnectPoint.X;
             this.m_Line.Y2 = pin.ConnectPoint.Y;
@@ -184,8 +200,11 @@ namespace WPF_LogicSimulation
             this.m_LineDatas[this.m_Line].End.Index = pin.Index;
             this.m_LineDatas[this.m_Line].End.Type = pin.Type;
             this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
+            if(this.m_LineDatas[this.m_Line].Begin.EndType == CQSaveFile_LinePoint.EndTypes.End)
+            {
+                System.Diagnostics.Trace.WriteLine("");
+            }
             this.m_IsConnect = false;
-            return true;
         }
 
         private bool Output_led_OnPinMouseDwon(QOutput_LED sender, CQPin pin, Point pt)
@@ -443,20 +462,7 @@ namespace WPF_LogicSimulation
         {
             CQSaveFile sv = new CQSaveFile();
             foreach(FrameworkElement child in this.canvas.Children)
-            {
-
-                //QGate gate = child as QGate;
-                //if(gate != null)
-                //{
-                //    CQSaveFile_Gate sg = new CQSaveFile_Gate();
-                //    CQGateBaseUI gateui = gate.DataContext as CQGateBaseUI;
-                //    sg.ID = gateui.ID;
-                //    sg.X = Canvas.GetLeft(gate);
-                //    sg.Y= Canvas.GetTop(gate);
-                //    sg.Type = gateui.Type;
-                //    sv.Gates.Add(sg);
-                //}
-                
+            {                
                 CQGateBaseUI gateui = child.DataContext as CQGateBaseUI;
                 if (gateui != null)
                 {
@@ -554,7 +560,43 @@ namespace WPF_LogicSimulation
             ToggleButton togglebutton = sender as ToggleButton;
             if(togglebutton != null)
             {
+                if(togglebutton.IsChecked == true)
+                {
+                    List<QInput_Switch> inputs;
+                    List<QGate> gates;
+                    List<QOutput_LED> outputs;
+                    this.GetGates(out inputs, out gates, out outputs);
+                    for(int i=0; i<inputs.Count; i++)
+                    {
+                        CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
+                        var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
+                        var v2 = this.m_LineDatas.Values.Where(x => x.End.GateID == input_ui.ID);
+                    }
+                }
+            }
+        }
 
+
+
+        void GetGates(out List<QInput_Switch> inputs, out List<QGate> gates, out List<QOutput_LED> outputs)
+        {
+            inputs = new List<QInput_Switch>();
+            gates = new List<QGate>();
+            outputs = new List<QOutput_LED>();
+            foreach(var child in this.canvas.Children)
+            {
+                if(child is QInput_Switch)
+                {
+                    inputs.Add(child as QInput_Switch);
+                }
+                else if(child is QOutput_LED)
+                {
+                    outputs.Add(child as QOutput_LED);
+                }
+                else if(child is QGate)
+                {
+                    gates.Add(child as QGate);
+                }
             }
         }
     }

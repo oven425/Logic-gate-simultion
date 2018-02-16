@@ -189,7 +189,6 @@ namespace WPF_LogicSimulation
 
     public class CQGateUI : CQGateBaseUI
     {
-        
         public CQGateUI()
         {
             this.Pin_in = new ObservableCollection<CQPin>();
@@ -197,7 +196,7 @@ namespace WPF_LogicSimulation
         }
     }
 
-    public class CQPin
+    public class CQPin:INotifyPropertyChanged
     {
         public enum Types
         {
@@ -207,5 +206,16 @@ namespace WPF_LogicSimulation
         public Types Type { set; get; }
         public int Index { set; get; }
         public Point ConnectPoint { set; get; }
+        bool m_IsEnableSimulate;
+        public bool IsEnableSimulate { set { this.m_IsEnableSimulate = value; this.Update("IsEnableSimulate"); } get { return this.m_IsEnableSimulate; } }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
+        public override string ToString()
+        {
+            return string.Format("Index:{0} Index:{1} ConnectPoint:{2}"
+                , this.Type
+                , this.Index
+                , this.ConnectPoint);
+        }
     }
 }

@@ -51,6 +51,14 @@ namespace WPF_LogicSimulation
         }
         [XmlAttribute("EndType")]
         public EndTypes EndType { set; get; }
+        public override string ToString()
+        {
+            return string.Format("Type:{0} EndType:{1} Index:{2} GateID:{3}"
+                , this.Type
+                , this.EndType
+                , this.Index
+                , this.GateID);
+        }
     }
 
     public class CQSaveFile_Line
