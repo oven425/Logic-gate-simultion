@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -11,34 +12,31 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Windows.Controls.Primitives;
 
 namespace WPF_LogicSimulation
 {
     /// <summary>
-    /// QGate.xaml 的互動邏輯
+    /// QOutput_LED.xaml 的互動邏輯
     /// </summary>
-    public partial class QGate : UserControl
+    public partial class QOutput_LED : UserControl
     {
-        public delegate bool PinMouseDwonDelegate(QGate sender, CQPin pin, Point pt);
+        public delegate bool PinMouseDwonDelegate(QOutput_LED sender, CQPin pin, Point pt);
         public event PinMouseDwonDelegate OnPinMouseDwon;
-        public delegate bool PinMouseUpDelegate(QGate sender, CQPin pin, Point pt);
+        public delegate bool PinMouseUpDelegate(QOutput_LED sender, CQPin pin, Point pt);
         public event PinMouseUpDelegate OnPinMouseUp;
-        public delegate bool GateMoveDelegate(QGate gate);
+        public delegate bool GateMoveDelegate(QOutput_LED gate);
         public event GateMoveDelegate OnGateMove;
-        
-        public QGate()
+        public QOutput_LED()
         {
             InitializeComponent();
-            
         }
 
         DependencyObject findElementInItemsControlItemAtIndex(ItemsControl itemsControl, int itemOfIndexToFind, string nameOfControlToFind)
         {
-            if (itemOfIndexToFind >= itemsControl.Items.Count) return null;
-
+            if (itemOfIndexToFind >= itemsControl.Items.Count)
+            {
+                return null;
+            }
             DependencyObject depObj = null;
             object o = itemsControl.Items[itemOfIndexToFind];
             if (o != null)
@@ -46,8 +44,6 @@ namespace WPF_LogicSimulation
                 var item = itemsControl.ItemContainerGenerator.ContainerFromItem(o);
                 if (item != null)
                 {
-                    //GridViewItem it = item as GridViewItem;
-                    //var i = it.FindName(nameOfControlToFind);
                     depObj = getVisualTreeChild(item, nameOfControlToFind);
                     return depObj;
                 }
@@ -88,30 +84,17 @@ namespace WPF_LogicSimulation
         public bool RefreshLocation()
         {
             bool result = true;
-            //List<CQPin> pin_in = new List<CQPin>();
-            //List<CQPin> pin_out = new List<CQPin>();
-            for (int i=0; i<this.itemscontrol_in.Items.Count; i++)
+
+            for (int i = 0; i < this.itemscontrol_in.Items.Count; i++)
             {
                 ContentPresenter container = this.itemscontrol_in.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
                 container.ApplyTemplate();
                 FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
                 CQPin pin = oo.DataContext as CQPin;
                 this.GetPinLocation(pin, oo);
-                //pin_in.Add(pin);
             }
-            for (int i = 0; i < this.itemscontrol_out.Items.Count; i++)
+            if (this.OnGateMove != null)
             {
-                ContentPresenter container = this.itemscontrol_out.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
-                container.ApplyTemplate();
-                FrameworkElement oo = container.ContentTemplate.FindName("rectangle", container) as FrameworkElement;
-                CQPin pin = oo.DataContext as CQPin;
-                this.GetPinLocation(pin, oo);
-                //pin_out.Add(pin);
-            }
-            if(this.OnGateMove != null)
-            {
-                
-
                 this.OnGateMove(this);
             }
             return result;
@@ -134,7 +117,7 @@ namespace WPF_LogicSimulation
             return relativeLocation;
         }
 
-        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+        private void rectangle_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Rectangle rectangle = sender as Rectangle;
             CQPin pin = rectangle.DataContext as CQPin;
@@ -146,7 +129,7 @@ namespace WPF_LogicSimulation
             e.Handled = true;
         }
 
-        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement rectangle = sender as FrameworkElement;
             CQPin pin = rectangle.DataContext as CQPin;
@@ -157,55 +140,13 @@ namespace WPF_LogicSimulation
             }
             e.Handled = true;
         }
-
-        private void UserControl_LayoutUpdated(object sender, EventArgs e)
-        {
-
-        }
     }
 
-    public class CQGateBaseUI : INotifyPropertyChanged
+    public class CQOutput_LedUI : CQGateBaseUI
     {
-        public string Type { set; get; }
-        public ObservableCollection<CQPin> Pin_in { set; get; }
-        public ObservableCollection<CQPin> Pin_out { set; get; }
-        public string GateName { set; get; }
-        public string ID
-        {
-            set { this.m_ID = value; }
-            get
-            {
-                if (string.IsNullOrEmpty(this.m_ID) == true)
-                {
-                    this.m_ID = Guid.NewGuid().ToString();
-                }
-                return this.m_ID;
-            }
-        }
-        string m_ID;
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
-    }
-
-    public class CQGateUI : CQGateBaseUI
-    {
-        
-        public CQGateUI()
+        public CQOutput_LedUI()
         {
             this.Pin_in = new ObservableCollection<CQPin>();
-            this.Pin_out = new ObservableCollection<CQPin>();
         }
-    }
-
-    public class CQPin
-    {
-        public enum Types
-        {
-            IN,
-            OUT
-        }
-        public Types Type { set; get; }
-        public int Index { set; get; }
-        public Point ConnectPoint { set; get; }
     }
 }

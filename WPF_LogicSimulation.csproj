@@ -55,6 +55,9 @@
     <Compile Include="QInput_Switch.xaml.cs">
       <DependentUpon>QInput_Switch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="QOutput_LED.xaml.cs">
+      <DependentUpon>QOutput_LED.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,6 +75,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="QInput_Switch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="QOutput_LED.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

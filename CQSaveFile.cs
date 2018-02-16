@@ -26,6 +26,8 @@ namespace WPF_LogicSimulation
 
     public class CQSaveFile_Gate
     {
+        [XmlAttribute("Type")]
+        public string Type { set; get; }
         [XmlAttribute("ID")]
         public string ID { set; get; }
         [XmlAttribute("X")]

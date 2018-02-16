@@ -17,9 +17,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Rectangle Fill="Wheat" Grid.Column="1" Stroke="Black" StrokeThickness="1"/>
-            <TextBlock Text="{Binding GateName}"/>
-            <ToggleButton x:Name="toggglebutton_switch" Grid.Row="1" Click="toggglebutton_switch_Click"/>
+            <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="Black" StrokeThickness="1"/>
+            <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+            <ToggleButton x:Name="toggglebutton_switch" Margin="8,5,8,5" Grid.Row="1" Click="toggglebutton_switch_Click">
+                <TextBlock x:Name="textblock_state" Text="False"/>
+            </ToggleButton>
         </Grid>
         
         <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="1" HorizontalAlignment="Left">

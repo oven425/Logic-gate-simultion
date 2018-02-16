@@ -121,7 +121,7 @@ namespace WPF_LogicSimulation
 
         private void toggglebutton_switch_Click(object sender, RoutedEventArgs e)
         {
-
+            this.textblock_state.Text = this.toggglebutton_switch.IsChecked == true ? "On" : "False";
         }
 
         private void rectangle_MouseDown(object sender, MouseButtonEventArgs e)
