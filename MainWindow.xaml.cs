@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -170,17 +171,49 @@ namespace WPF_LogicSimulation
 
         private bool Output_led_OnGateMove(QOutput_LED gate)
         {
-            throw new NotImplementedException();
+            this.ChangeLine(gate);
+            return true;
         }
 
         private bool Output_led_OnPinMouseUp(QOutput_LED sender, CQPin pin, Point pt)
         {
-            throw new NotImplementedException();
+            CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
+            this.m_Line.X2 = pin.ConnectPoint.X;
+            this.m_Line.Y2 = pin.ConnectPoint.Y;
+            this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
+            this.m_LineDatas[this.m_Line].End.Index = pin.Index;
+            this.m_LineDatas[this.m_Line].End.Type = pin.Type;
+            this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
+            this.m_IsConnect = false;
+            return true;
         }
 
         private bool Output_led_OnPinMouseDwon(QOutput_LED sender, CQPin pin, Point pt)
         {
-            throw new NotImplementedException();
+            CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
+            this.m_Line = new Line();
+            this.m_Line.Fill = Brushes.Gray;
+            this.m_Line.X1 = this.m_Line.X2 = pin.ConnectPoint.X;
+            this.m_Line.Y1 = this.m_Line.Y2 = pin.ConnectPoint.Y;
+            this.m_Line.Stroke = Brushes.Gray;
+            this.m_Line.StrokeThickness = 1;
+            this.m_IsConnect = true;
+            CQSaveFile_Line save_line = new CQSaveFile_Line() { Line = this.m_Line };
+            if (this.m_LineDatas.ContainsKey(save_line.Line) == false)
+            {
+                this.m_LineDatas.Add(save_line.Line, save_line);
+            }
+            else
+            {
+
+            }
+            this.m_LineDatas[this.m_Line].Begin.GateID = gateui.ID;
+            this.m_LineDatas[this.m_Line].Begin.Index = pin.Index;
+            this.m_LineDatas[this.m_Line].Begin.Type = pin.Type;
+
+            this.m_LineDatas[this.m_Line].Begin.EndType = CQSaveFile_LinePoint.EndTypes.Start;
+            this.canvas.Children.Add(this.m_Line);
+            return true;
         }
 
         void Add_AND(double x, double y, string id)
@@ -473,6 +506,11 @@ namespace WPF_LogicSimulation
                                 this.Add_Input_Switch(gate.X, gate.Y, gate.ID);
                             }
                             break;
+                        case "LED":
+                            {
+                                this.Add_LED(gate.X, gate.Y, gate.ID);
+                            }
+                            break;
                     }
                    
                 }
@@ -500,10 +538,24 @@ namespace WPF_LogicSimulation
                     {
                         input_switch.RefreshLocation();
                     }
+                    QOutput_LED output_led = child as QOutput_LED;
+                    if(output_led != null)
+                    {
+                        output_led.RefreshLocation();
+                    }
                     this.ChangeLine(child);
                 }
             }
 
+        }
+
+        private void togglebutton_simulation_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleButton togglebutton = sender as ToggleButton;
+            if(togglebutton != null)
+            {
+
+            }
         }
     }
 }

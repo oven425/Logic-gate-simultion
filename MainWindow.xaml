@@ -14,6 +14,7 @@
         <StackPanel Orientation="Horizontal">
             <Button x:Name="button_save" Click="button_save_Click">Save</Button>
             <Button x:Name="button_load" Click="button_load_Click">Load</Button>
+            <ToggleButton x:Name="togglebutton_simulation" Click="togglebutton_simulation_Click">Simulatione</ToggleButton>
         </StackPanel>
         <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp"/>
 
