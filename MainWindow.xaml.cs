@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace WPF_LogicSimulation
 {
@@ -23,9 +24,28 @@ namespace WPF_LogicSimulation
     public partial class MainWindow : Window
     {
         Dictionary<Line, CQSaveFile_Line> m_LineDatas = new Dictionary<Line, CQSaveFile_Line>();
+        BackgroundWorker m_Thread_Sim;
         public MainWindow()
         {
             InitializeComponent();
+            this.m_Thread_Sim = new BackgroundWorker();
+            this.m_Thread_Sim.DoWork += M_Thread_Sim_DoWork;
+        }
+
+        private void M_Thread_Sim_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while(true)
+            {
+                try
+                {
+                    
+                }
+                catch(Exception ee)
+                {
+                    System.Diagnostics.Trace.WriteLine(ee.Message);
+                    System.Diagnostics.Trace.WriteLine(ee.StackTrace);
+                }
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -200,9 +220,12 @@ namespace WPF_LogicSimulation
             this.m_LineDatas[this.m_Line].End.Index = pin.Index;
             this.m_LineDatas[this.m_Line].End.Type = pin.Type;
             this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            if(this.m_LineDatas[this.m_Line].Begin.EndType == CQSaveFile_LinePoint.EndTypes.End)
+            if(this.m_LineDatas[this.m_Line].Begin.Type == CQPin.Types.IN)
             {
-                System.Diagnostics.Trace.WriteLine("");
+                CQSaveFile_LinePoint pp1 = new CQSaveFile_LinePoint(this.m_LineDatas[this.m_Line].End);
+                CQSaveFile_LinePoint pp2 = new CQSaveFile_LinePoint(this.m_LineDatas[this.m_Line].Begin);
+                this.m_LineDatas[this.m_Line].Begin = pp1;
+                this.m_LineDatas[this.m_Line].End = pp2;
             }
             this.m_IsConnect = false;
         }
@@ -485,6 +508,7 @@ namespace WPF_LogicSimulation
 
         private void button_load_Click(object sender, RoutedEventArgs e)
         {
+            this.togglebutton_simulation.IsChecked = false;
             CQSaveFile sv = null;
             if (File.Exists("QQ.txt") == true)
             {
@@ -555,6 +579,8 @@ namespace WPF_LogicSimulation
 
         }
 
+        public List<CQSimulateData> m_Simulate = new List<CQSimulateData>();
+
         private void togglebutton_simulation_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton togglebutton = sender as ToggleButton;
@@ -570,7 +596,10 @@ namespace WPF_LogicSimulation
                     {
                         CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
                         var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
-                        var v2 = this.m_LineDatas.Values.Where(x => x.End.GateID == input_ui.ID);
+                        foreach(CQSaveFile_Line line in v1)
+                        {
+                            
+                        }
                     }
                 }
             }

@@ -51,6 +51,20 @@ namespace WPF_LogicSimulation
         }
         [XmlAttribute("EndType")]
         public EndTypes EndType { set; get; }
+
+        public CQSaveFile_LinePoint()
+        {
+
+        }
+
+        public CQSaveFile_LinePoint(CQSaveFile_LinePoint data)
+        {
+            this.GateID = data.GateID;
+            this.Index = data.Index;
+            this.Type = data.Type;
+            this.EndType = data.EndType;
+        }
+
         public override string ToString()
         {
             return string.Format("Type:{0} EndType:{1} Index:{2} GateID:{3}"
@@ -71,6 +85,12 @@ namespace WPF_LogicSimulation
         {
             this.Begin = new CQSaveFile_LinePoint();
             this.End = new CQSaveFile_LinePoint();
+        }
+
+        public CQSaveFile_Line(CQSaveFile_Line data)
+        {
+            this.Line = data.Line;
+           
         }
     }
 }
