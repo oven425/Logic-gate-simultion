@@ -52,7 +52,8 @@ namespace WPF_LogicSimulation
         {
             //this.Add_AND(0, 0, "");
             //this.Add_AND(0, 0, "");
-            //this.Add_AND(0, 0, "");
+            this.Add_AND(0, 0, "");
+            this.Add_Input_Switch(0, 0, "");
             this.Add_Input_Switch(0, 0, "");
             this.Add_LED(0, 0, "");
         }
@@ -591,20 +592,43 @@ namespace WPF_LogicSimulation
                     List<QInput_Switch> inputs;
                     List<QGate> gates;
                     List<QOutput_LED> outputs;
+                    
                     this.GetGates(out inputs, out gates, out outputs);
-                    for(int i=0; i<inputs.Count; i++)
+                    List<FrameworkElement> gates1 = new List<FrameworkElement>();
+                    for(int i=0; i<gates.Count; i++)
                     {
+                        gates1.Add(gates[i]);
+                    }
+                    for (int i = 0; i < outputs.Count; i++)
+                    {
+                        gates1.Add(outputs[i]);
+                    }
+                    for (int i=0; i<inputs.Count; i++)
+                    {
+                        CQSimulateData sud = new CQSimulateData() { GateData = inputs[i].DataContext as CQInput_SwitchUI };
+                        
                         CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
                         var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
                         foreach(CQSaveFile_Line line in v1)
                         {
-                            
+                            this.FineGateFromGateID(line.End.GateID, gates1);
                         }
                     }
                 }
             }
         }
 
+        void FineGateFromGateID(string id, List<FrameworkElement> gates)
+        {
+            foreach(FrameworkElement child in gates)
+            {
+                CQGateBaseUI ui = child.DataContext as CQGateBaseUI;
+                if(ui != null)
+                {
+
+                }
+            }
+        }
 
 
         void GetGates(out List<QInput_Switch> inputs, out List<QGate> gates, out List<QOutput_LED> outputs)
