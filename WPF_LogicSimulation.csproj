@@ -49,6 +49,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CQSaveFile.cs" />
+    <Compile Include="CQSimulateData.cs" />
     <Compile Include="QGate.xaml.cs">
       <DependentUpon>QGate.xaml</DependentUpon>
     </Compile>
@@ -58,6 +59,7 @@
     <Compile Include="QOutput_LED.xaml.cs">
       <DependentUpon>QOutput_LED.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ValueConvert.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

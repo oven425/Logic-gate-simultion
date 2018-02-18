@@ -611,21 +611,31 @@ namespace WPF_LogicSimulation
                         var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
                         foreach(CQSaveFile_Line line in v1)
                         {
-                            this.FineGateFromGateID(line.End.GateID, gates1);
+                            CQGateBaseUI gateui;
+                            FrameworkElement gate;
+                            this.FineGateFromGateID(line.End.GateID, gates1, out gate, out gateui);
+                            CQSimulateData sud1 = new CQSimulateData();
+                            sud1.Col = 1;
+                            sud1.GateData = gateui;
+                            sud.Nexts.Add(sud1);
                         }
                     }
                 }
             }
         }
 
-        void FineGateFromGateID(string id, List<FrameworkElement> gates)
+        void FineGateFromGateID(string id, List<FrameworkElement> gates, out FrameworkElement gate, out CQGateBaseUI gateui)
         {
+            gate = null;
+            gateui = null;
             foreach(FrameworkElement child in gates)
             {
                 CQGateBaseUI ui = child.DataContext as CQGateBaseUI;
-                if(ui != null)
+                if(ui.ID == id)
                 {
-
+                    gate = child;
+                    gateui = ui;
+                    break;
                 }
             }
         }
