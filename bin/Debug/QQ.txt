@@ -1,23 +1,18 @@
 <?xml version="1.0"?>
 <AA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Gates>
-    <Gate Type="AND" ID="ae349400-ad1b-4f08-8c5d-40736eb3b0cd" X="198.66666666666666" Y="82" />
-    <Gate Type="Switch" ID="64cbdd31-d344-44fc-8278-7f954176b0b5" X="39.333333333333314" Y="41.333333333333336" />
-    <Gate Type="Switch" ID="441799e1-be47-47e5-9e90-1f07c31673dd" X="38.666666666666671" Y="113.99999999999999" />
-    <Gate Type="LED" ID="42aebf60-1eb2-4c8a-b566-92a0dbf9da42" X="335.99999999999994" Y="82" />
+    <Gate Type="NOT" ID="5b3847db-e4b6-473e-829a-fc9ae827778e" X="171.33333333333334" Y="39.999999999999986" />
+    <Gate Type="Switch" ID="a816f995-38a2-4307-9a6b-975561dccb78" X="31.999999999999993" Y="39.33333333333335" />
+    <Gate Type="LED" ID="2b90b10e-be54-4b82-92ca-6b0e473e4e3e" X="340.66666666666663" Y="39.333333333333329" />
   </Gates>
   <Lines>
     <Line>
-      <Begin GateID="64cbdd31-d344-44fc-8278-7f954176b0b5" Index="0" Type="OUT" EndType="Start" />
-      <End GateID="ae349400-ad1b-4f08-8c5d-40736eb3b0cd" Index="0" Type="IN" EndType="End" />
+      <Begin GateID="a816f995-38a2-4307-9a6b-975561dccb78" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="5b3847db-e4b6-473e-829a-fc9ae827778e" Index="0" Type="IN" EndType="End" />
     </Line>
     <Line>
-      <Begin GateID="441799e1-be47-47e5-9e90-1f07c31673dd" Index="0" Type="OUT" EndType="Start" />
-      <End GateID="ae349400-ad1b-4f08-8c5d-40736eb3b0cd" Index="1" Type="IN" EndType="End" />
-    </Line>
-    <Line>
-      <Begin GateID="ae349400-ad1b-4f08-8c5d-40736eb3b0cd" Index="0" Type="OUT" EndType="Start" />
-      <End GateID="42aebf60-1eb2-4c8a-b566-92a0dbf9da42" Index="0" Type="IN" EndType="End" />
+      <Begin GateID="5b3847db-e4b6-473e-829a-fc9ae827778e" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="2b90b10e-be54-4b82-92ca-6b0e473e4e3e" Index="0" Type="IN" EndType="End" />
     </Line>
   </Lines>
 </AA>

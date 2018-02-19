@@ -51,10 +51,10 @@ namespace WPF_LogicSimulation
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //this.Add_AND(0, 0, "");
-            //this.Add_AND(0, 0, "");
             this.Add_AND(0, 0, "");
+            this.Add_NOT(0, 0, "");
             this.Add_Input_Switch(0, 0, "");
-            this.Add_Input_Switch(0, 0, "");
+            //this.Add_Input_Switch(0, 0, "");
             this.Add_LED(0, 0, "");
         }
         bool m_IsConnect;
@@ -257,6 +257,28 @@ namespace WPF_LogicSimulation
             this.m_LineDatas[this.m_Line].Begin.EndType = CQSaveFile_LinePoint.EndTypes.Start;
             this.canvas.Children.Add(this.m_Line);
             return true;
+        }
+
+        void Add_NOT(double x, double y, string id)
+        {
+            CQGateUI cc = null;
+            QGate ggate = null;
+            cc = new CQGateUI();
+            cc.GateName = "NOT";
+            cc.Type = "NOT";
+            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index = 0 });
+            cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
+            ggate = new QGate();
+            ggate.Height = 50;
+            ggate.Width = 80;
+            cc.ID = id;
+            Canvas.SetLeft(ggate, x);
+            Canvas.SetTop(ggate, y);
+            ggate.DataContext = cc;
+            ggate.OnPinMouseDwon += Ggate_OnPinMouseDwon;
+            ggate.OnPinMouseUp += Ggate_OnPinMouseUp;
+            ggate.OnGateMove += Ggate_OnGateMove;
+            this.canvas.Children.Add(ggate);
         }
 
         void Add_AND(double x, double y, string id)
@@ -532,6 +554,11 @@ namespace WPF_LogicSimulation
                                 this.Add_AND(gate.X, gate.Y, gate.ID);
                             }
                             break;
+                        case "NOT":
+                            {
+                                this.Add_NOT(gate.X, gate.Y, gate.ID);
+                            }
+                            break;
                         case "Switch":
                             {
                                 this.Add_Input_Switch(gate.X, gate.Y, gate.ID);
@@ -608,23 +635,37 @@ namespace WPF_LogicSimulation
                         sud.GateData.IsSimulate = true;
                         CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
                         var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
+                        int col = 1;
                         while (true)
                         {
-                            CQSimulateData sud1 = new CQSimulateData();
+                            List<CQSimulateData> sud1s = new List<CQSimulateData>();
+                            CQSimulateData sud1;
                             foreach (CQSaveFile_Line line in v1)
                             {
                                 CQGateBaseUI gateui;
                                 FrameworkElement gate;
                                 this.FineGateFromGateID(line.End.GateID, gates1, out gate, out gateui);
-                                sud1 = new CQSimulateData();
-                                sud1.Col = 1;
-                                sud1.GateData = gateui;
-                                sud1.GateData.IsSimulate = true;
-                                sud.Nexts.Add(sud1);
+                                if(gateui != null)
+                                {
+                                    sud1 = new CQSimulateData();
+                                    sud1.Col = col++;
+                                    sud1.GateData = gateui;
+                                    sud1.GateData.IsSimulate = true;
+                                    sud1s.Add(sud1);
+                                    //sud.Nexts.Add(sud1);
+                                }
+                                
                             }
-                            v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
+                            if(sud1s.Count == 0)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
+                            }
+                            
                         }
-                        
                     }
                 }
                 else
