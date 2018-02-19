@@ -587,13 +587,12 @@ namespace WPF_LogicSimulation
             ToggleButton togglebutton = sender as ToggleButton;
             if(togglebutton != null)
             {
-                if(togglebutton.IsChecked == true)
+                List<QInput_Switch> inputs;
+                List<QGate> gates;
+                List<QOutput_LED> outputs;
+                this.GetGates(out inputs, out gates, out outputs);
+                if (togglebutton.IsChecked == true)
                 {
-                    List<QInput_Switch> inputs;
-                    List<QGate> gates;
-                    List<QOutput_LED> outputs;
-                    
-                    this.GetGates(out inputs, out gates, out outputs);
                     List<FrameworkElement> gates1 = new List<FrameworkElement>();
                     for(int i=0; i<gates.Count; i++)
                     {
@@ -606,19 +605,44 @@ namespace WPF_LogicSimulation
                     for (int i=0; i<inputs.Count; i++)
                     {
                         CQSimulateData sud = new CQSimulateData() { GateData = inputs[i].DataContext as CQInput_SwitchUI };
-                        
+                        sud.GateData.IsSimulate = true;
                         CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
                         var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
-                        foreach(CQSaveFile_Line line in v1)
+                        while (true)
                         {
-                            CQGateBaseUI gateui;
-                            FrameworkElement gate;
-                            this.FineGateFromGateID(line.End.GateID, gates1, out gate, out gateui);
                             CQSimulateData sud1 = new CQSimulateData();
-                            sud1.Col = 1;
-                            sud1.GateData = gateui;
-                            sud.Nexts.Add(sud1);
+                            foreach (CQSaveFile_Line line in v1)
+                            {
+                                CQGateBaseUI gateui;
+                                FrameworkElement gate;
+                                this.FineGateFromGateID(line.End.GateID, gates1, out gate, out gateui);
+                                sud1 = new CQSimulateData();
+                                sud1.Col = 1;
+                                sud1.GateData = gateui;
+                                sud1.GateData.IsSimulate = true;
+                                sud.Nexts.Add(sud1);
+                            }
+                            v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
                         }
+                        
+                    }
+                }
+                else
+                {
+                    foreach(var vv in gates)
+                    {
+                        CQGateBaseUI gateui = vv.DataContext as CQGateBaseUI;
+                        gateui.IsSimulate = false;
+                    }
+                    foreach (var vv in inputs)
+                    {
+                        CQGateBaseUI gateui = vv.DataContext as CQGateBaseUI;
+                        gateui.IsSimulate = false;
+                    }
+                    foreach (var vv in outputs)
+                    {
+                        CQGateBaseUI gateui = vv.DataContext as CQGateBaseUI;
+                        gateui.IsSimulate = false;
                     }
                 }
             }

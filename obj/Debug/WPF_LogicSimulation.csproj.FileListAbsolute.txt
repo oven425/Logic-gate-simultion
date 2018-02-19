@@ -34,3 +34,4 @@ C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\WPF_LogicSimula
 C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\WPF_LogicSimulation.csprojResolveAssemblyReference.cache
 C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\QOutput_LED.g.cs
 C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\QOutput_LED.baml
+C:\Users\許軍斌\Desktop\Logic-gate-simultion-master\obj\Debug\GeneratedInternalTypeHelper.g.cs

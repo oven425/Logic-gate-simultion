@@ -8,8 +8,9 @@
              xmlns:src="clr-namespace:WPF_LogicSimulation"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <src:CQBool2Brush x:Key="bool2brush"/>
+        <src:CQBool2Brush x:Key="bool2brush" True="Orange" False="Black"/>
         <src:CQBoolVisibility x:Key="bool2visibility"/>
+        <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -35,7 +36,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="Black" StrokeThickness="1"/>
+                <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
                 <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
                 <Ellipse Grid.Row="1" Fill="Red" Margin="5,0,5,0"/>
             </Grid>

@@ -170,18 +170,13 @@ namespace WPF_LogicSimulation
         public ObservableCollection<CQPin> Pin_in { set; get; }
         public ObservableCollection<CQPin> Pin_out { set; get; }
         public string GateName { set; get; }
+        bool m_IsSimulate;
         public string ID
         {
             set { this.m_ID = value; }
-            get
-            {
-                if (string.IsNullOrEmpty(this.m_ID) == true)
-                {
-                    this.m_ID = Guid.NewGuid().ToString();
-                }
-                return this.m_ID;
-            }
+            get { if (string.IsNullOrEmpty(this.m_ID) == true) { this.m_ID = Guid.NewGuid().ToString(); } return this.m_ID; }
         }
+        public bool IsSimulate { set { this.m_IsSimulate = value; this.Update("IsSimulate"); } get { return this.m_IsSimulate; } }
         string m_ID;
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
