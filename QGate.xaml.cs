@@ -157,11 +157,6 @@ namespace WPF_LogicSimulation
             }
             e.Handled = true;
         }
-
-        private void UserControl_LayoutUpdated(object sender, EventArgs e)
-        {
-
-        }
     }
 
     public class CQGateBaseUI : INotifyPropertyChanged

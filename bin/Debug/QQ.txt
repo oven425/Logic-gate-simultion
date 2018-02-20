@@ -1,18 +1,28 @@
 <?xml version="1.0"?>
 <AA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Gates>
-    <Gate Type="NOT" ID="5b3847db-e4b6-473e-829a-fc9ae827778e" X="171.33333333333334" Y="39.999999999999986" />
-    <Gate Type="Switch" ID="a816f995-38a2-4307-9a6b-975561dccb78" X="31.999999999999993" Y="39.33333333333335" />
-    <Gate Type="LED" ID="2b90b10e-be54-4b82-92ca-6b0e473e4e3e" X="340.66666666666663" Y="39.333333333333329" />
+    <Gate Type="NOT" ID="81867064-d6eb-4c07-b2b4-fc6b6a55dbf8" X="219.33333333333334" Y="48.666666666666686" />
+    <Gate Type="AND" ID="3dd99e87-abd2-40b1-9392-6d2b303e7fac" X="112.66666666666667" Y="47.999999999999993" />
+    <Gate Type="Switch" ID="de944e17-3e7c-48e5-a595-b7368d644c55" X="0.66666666666666785" Y="17.999999999999996" />
+    <Gate Type="Switch" ID="3ee01313-47c1-4520-bd6c-5473acdea727" X="0.6666666666666643" Y="78" />
+    <Gate Type="LED" ID="ff3b215a-a3cf-40e9-9cef-0719fd397a25" X="331.99999999999994" Y="47.999999999999986" />
   </Gates>
   <Lines>
     <Line>
-      <Begin GateID="a816f995-38a2-4307-9a6b-975561dccb78" Index="0" Type="OUT" EndType="Start" />
-      <End GateID="5b3847db-e4b6-473e-829a-fc9ae827778e" Index="0" Type="IN" EndType="End" />
+      <Begin GateID="de944e17-3e7c-48e5-a595-b7368d644c55" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="3dd99e87-abd2-40b1-9392-6d2b303e7fac" Index="0" Type="IN" EndType="End" />
     </Line>
     <Line>
-      <Begin GateID="5b3847db-e4b6-473e-829a-fc9ae827778e" Index="0" Type="OUT" EndType="Start" />
-      <End GateID="2b90b10e-be54-4b82-92ca-6b0e473e4e3e" Index="0" Type="IN" EndType="End" />
+      <Begin GateID="3ee01313-47c1-4520-bd6c-5473acdea727" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="3dd99e87-abd2-40b1-9392-6d2b303e7fac" Index="1" Type="IN" EndType="End" />
+    </Line>
+    <Line>
+      <Begin GateID="3dd99e87-abd2-40b1-9392-6d2b303e7fac" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="81867064-d6eb-4c07-b2b4-fc6b6a55dbf8" Index="0" Type="IN" EndType="End" />
+    </Line>
+    <Line>
+      <Begin GateID="81867064-d6eb-4c07-b2b4-fc6b6a55dbf8" Index="0" Type="OUT" EndType="Start" />
+      <End GateID="ff3b215a-a3cf-40e9-9cef-0719fd397a25" Index="0" Type="IN" EndType="End" />
     </Line>
   </Lines>
 </AA>

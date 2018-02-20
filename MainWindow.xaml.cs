@@ -101,7 +101,7 @@ namespace WPF_LogicSimulation
             return true;
         }
 
-        void Add_Input_Switch(double x, double y, string id)
+        void Add_Input_Switch(double x=0, double y=0, string id="")
         {
             CQInput_SwitchUI cc = null;
             QInput_Switch input_switch = null;
@@ -171,7 +171,7 @@ namespace WPF_LogicSimulation
             return true;
         }
 
-        void Add_LED(double x, double y, string id)
+        void Add_LED(double x=0, double y=0, string id="")
         {
             CQOutput_LedUI cc = null;
             QOutput_LED output_led = null;
@@ -259,7 +259,7 @@ namespace WPF_LogicSimulation
             return true;
         }
 
-        void Add_NOT(double x, double y, string id)
+        void Add_NOT(double x=0, double y=0, string id="")
         {
             CQGateUI cc = null;
             QGate ggate = null;
@@ -281,7 +281,7 @@ namespace WPF_LogicSimulation
             this.canvas.Children.Add(ggate);
         }
 
-        void Add_AND(double x, double y, string id)
+        void Add_AND(double x=0, double y=0, string id="")
         {
             CQGateUI cc = null;
             QGate ggate = null;
@@ -543,8 +543,7 @@ namespace WPF_LogicSimulation
             }
             if(sv != null)
             {
-                this.canvas.Children.Clear();
-                this.m_LineDatas.Clear();
+                this.ClearGate();
                 foreach(CQSaveFile_Gate gate in sv.Gates)
                 {
                     switch(gate.Type)
@@ -631,41 +630,34 @@ namespace WPF_LogicSimulation
                     }
                     for (int i=0; i<inputs.Count; i++)
                     {
+                        int col = 1;
                         CQSimulateData sud = new CQSimulateData() { GateData = inputs[i].DataContext as CQInput_SwitchUI };
                         sud.GateData.IsSimulate = true;
-                        CQInput_SwitchUI input_ui = inputs[i].DataContext as CQInput_SwitchUI;
-                        var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
-                        int col = 1;
-                        while (true)
+                        List< CQSimulateData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
+                        sud.Nexts.AddRange(temp_suds);
+                        while(true)
                         {
-                            List<CQSimulateData> sud1s = new List<CQSimulateData>();
-                            CQSimulateData sud1;
-                            foreach (CQSaveFile_Line line in v1)
+                            List<CQSimulateData> temp_suds_find = temp_suds.ToList();
+
+                            col = col + 1;
+                            bool isend = true;
+                            foreach (CQSimulateData simd in temp_suds_find)
                             {
-                                CQGateBaseUI gateui;
-                                FrameworkElement gate;
-                                this.FineGateFromGateID(line.End.GateID, gates1, out gate, out gateui);
-                                if(gateui != null)
+                                temp_suds = this.FindNexts(simd.GateData.ID, col, gates1);
+                                if(temp_suds.Count > 0)
                                 {
-                                    sud1 = new CQSimulateData();
-                                    sud1.Col = col++;
-                                    sud1.GateData = gateui;
-                                    sud1.GateData.IsSimulate = true;
-                                    sud1s.Add(sud1);
-                                    //sud.Nexts.Add(sud1);
+                                    isend = false;
+                                    simd.Nexts.AddRange(temp_suds);
                                 }
-                                
                             }
-                            if(sud1s.Count == 0)
+                            if(isend == true)
                             {
                                 break;
                             }
-                            else
-                            {
-                                v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == input_ui.ID);
-                            }
-                            
+
                         }
+                        
+
                     }
                 }
                 else
@@ -687,6 +679,29 @@ namespace WPF_LogicSimulation
                     }
                 }
             }
+        }
+
+        List<CQSimulateData> FindNexts(string id, int col, List<FrameworkElement> gates)
+        {
+            List<CQSimulateData> suds = new List<CQSimulateData>();
+            var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == id);
+            CQSimulateData sud1;
+            foreach (CQSaveFile_Line line in v1)
+            {
+                CQGateBaseUI gateui;
+                FrameworkElement gate;
+                this.FineGateFromGateID(line.End.GateID, gates, out gate, out gateui);
+                if (gateui != null)
+                {
+                    sud1 = new CQSimulateData();
+                    sud1.Col = col++;
+                    sud1.GateData = gateui;
+                    sud1.GateData.IsSimulate = true;
+                    suds.Add(sud1);
+                }
+
+            }
+            return suds;
         }
 
         void FineGateFromGateID(string id, List<FrameworkElement> gates, out FrameworkElement gate, out CQGateBaseUI gateui)
@@ -726,6 +741,45 @@ namespace WPF_LogicSimulation
                     gates.Add(child as QGate);
                 }
             }
+        }
+
+        private void button_addgate_Click(object sender, RoutedEventArgs e)
+        {
+            string gatetype = this.combobox_gate.SelectionBoxItem as string;
+            switch(gatetype.ToUpperInvariant())
+            {
+                case "NOT":
+                    {
+                        this.Add_NOT();
+                    }
+                    break;
+                case "AND":
+                    {
+                        this.Add_AND();
+                    }
+                    break;
+                case "SWITCH":
+                    {
+                        this.Add_Input_Switch();
+                    }
+                    break;
+                case "LED":
+                    {
+                        this.Add_LED();
+                    }
+                    break;
+            }
+        }
+
+        void ClearGate()
+        {
+            this.canvas.Children.Clear();
+            this.m_LineDatas.Clear();
+        }
+
+        private void button_clear_Click(object sender, RoutedEventArgs e)
+        {
+            this.ClearGate();
         }
     }
 }

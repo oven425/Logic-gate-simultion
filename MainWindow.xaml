@@ -12,8 +12,16 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
+            <ComboBox x:Name="combobox_gate" SelectedIndex="0">
+                <ComboBoxItem>NOT</ComboBoxItem>
+                <ComboBoxItem>AND</ComboBoxItem>
+                <ComboBoxItem>Switch</ComboBoxItem>
+                <ComboBoxItem>LED</ComboBoxItem>
+            </ComboBox>
+            <Button x:Name="button_addgate" Click="button_addgate_Click">Add</Button>
             <Button x:Name="button_save" Click="button_save_Click">Save</Button>
             <Button x:Name="button_load" Click="button_load_Click">Load</Button>
+            <Button x:Name="button_clear" Click="button_clear_Click">Clear</Button>
             <ToggleButton x:Name="togglebutton_simulation" Click="togglebutton_simulation_Click">Simulatione</ToggleButton>
         </StackPanel>
         <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp"/>

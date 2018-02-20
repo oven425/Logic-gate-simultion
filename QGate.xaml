@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WPF_LogicSimulation"
              mc:Ignorable="d" 
              xmlns:src="clr-namespace:WPF_LogicSimulation"
-             d:DesignHeight="300" d:DesignWidth="300" LayoutUpdated="UserControl_LayoutUpdated">
+             d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <src:CQBool2Brush x:Key="bool2brush" True="Orange" False="Black"/>
         <src:CQBoolVisibility x:Key="bool2visibility"/>
