@@ -652,6 +652,8 @@ namespace WPF_LogicSimulation
                             }
                             if(isend == true)
                             {
+                                this.m_Simulate.Add(sud);
+                                
                                 break;
                             }
 
@@ -679,6 +681,39 @@ namespace WPF_LogicSimulation
                     }
                 }
             }
+        }
+
+        bool FindGate(string id, List<CQSimulateData> src)
+        {
+            bool result = false;
+            List<CQSimulateData> temp;
+            for(int i=0; i<src.Count; i++)
+            {
+                temp = src[i].Nexts;
+                bool isend = false;
+                while(true)
+                {
+                    if(temp.All(x=>x.Nexts.Count==0) == true)
+                    {
+                        isend = true;
+                    }
+                    else
+                    {
+                        //var hr = temp.Nexts.FirstOrDefault(x => x.GateData.ID == id);
+                        //if (hr != null)
+                        //{
+                        //    isend = true;
+                        //    break;
+                        //}
+                    }
+                    
+                    if (isend == true)
+                    {
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         List<CQSimulateData> FindNexts(string id, int col, List<FrameworkElement> gates)
