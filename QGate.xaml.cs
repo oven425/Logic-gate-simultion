@@ -166,13 +166,17 @@ namespace WPF_LogicSimulation
         public ObservableCollection<CQPin> Pin_out { set; get; }
         public string GateName { set; get; }
         bool m_IsSimulate;
+        string m_ID;
         public string ID
         {
             set { this.m_ID = value; }
             get { if (string.IsNullOrEmpty(this.m_ID) == true) { this.m_ID = Guid.NewGuid().ToString(); } return this.m_ID; }
         }
         public bool IsSimulate { set { this.m_IsSimulate = value; this.Update("IsSimulate"); } get { return this.m_IsSimulate; } }
-        string m_ID;
+        public virtual bool Process()
+        {
+            return true;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
         public override string ToString()
@@ -189,6 +193,39 @@ namespace WPF_LogicSimulation
         {
             this.Pin_in = new ObservableCollection<CQPin>();
             this.Pin_out = new ObservableCollection<CQPin>();
+            this.Logic = new Dictionary<string, string>();
+            
+        }
+
+        public void CreateNOT()
+        {
+            this.Logic.Add("0", "1");
+            this.Logic.Add("1", "0");
+        }
+
+        public void CreateAND()
+        {
+            this.Logic.Add("00", "0");
+            this.Logic.Add("01", "0");
+            this.Logic.Add("10", "0");
+            this.Logic.Add("11", "1");
+        }
+
+        public Dictionary<string, string> Logic { set; get; }
+
+        public override bool Process()
+        {
+            string str_in = "";
+            for(int i= 0; i<this.Pin_in.Count; i++)
+            {
+                str_in = str_in + (this.Pin_in[i].IsTrue == true ? "1" : "0");
+            }
+            string str_out = this.Logic[str_in];
+            for(int i=0; i<str_out.Length; i++)
+            {
+                this.Pin_out[i].IsTrue = (str_out[i] == '1');
+            }
+            return true;
         }
     }
 

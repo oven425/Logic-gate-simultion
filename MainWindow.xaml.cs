@@ -31,6 +31,7 @@ namespace WPF_LogicSimulation
             InitializeComponent();
             this.m_Thread_Sim = new BackgroundWorker();
             this.m_Thread_Sim.DoWork += M_Thread_Sim_DoWork;
+            
         }
 
         private void M_Thread_Sim_DoWork(object sender, DoWorkEventArgs e)
@@ -41,11 +42,27 @@ namespace WPF_LogicSimulation
                 {
                     for(int i= 0; i<this.m_Simulate.Count; i++)
                     {
-                        List<CQSimulateData> temp = this.m_Simulate[i].Nexts;
-                        foreach(CQSimulateData sud in temp)
+                        List<CQSimulateData> temp_parent = new List<CQSimulateData>() { this.m_Simulate[i] };
+                        //List<CQSimulateData> temp = this.m_Simulate[i].Nexts;
+                        while(true)
                         {
-                            sud.GateData.Pin_in[sud.PinIndex].IsTrue = this.m_Simulate[i].GateData.Pin_out[this.m_Simulate[i].PinIndex].IsTrue;
+                            foreach(CQSimulateData parent in temp_parent)
+                            {
+                                foreach (CQSimulateData sud in parent.Nexts)
+                                {
+                                    sud.GateData.Pin_in[sud.PinIndex].IsTrue = parent.GateData.Pin_out[parent.PinIndex].IsTrue;
+                                    sud.GateData.Process();
+                                }
+                            }
+
+                            temp_parent = temp_parent.SelectMany(x => x.Nexts).ToList();
+                            //temp_parent = temp;
+                            if (temp_parent.Count == 0)
+                            {
+                                break;
+                            }
                         }
+                        
                     }
                     System.Threading.Thread.Sleep(100);
                 }
@@ -272,6 +289,7 @@ namespace WPF_LogicSimulation
             cc.Type = "NOT";
             cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index = 0 });
             cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
+            cc.CreateNOT();
             ggate = new QGate();
             ggate.Height = 50;
             ggate.Width = 80;
@@ -295,6 +313,7 @@ namespace WPF_LogicSimulation
             cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index=0 });
             cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index=1 });
             cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
+            cc.CreateAND();
             ggate = new QGate();
             ggate.Height = 50;
             ggate.Width = 80;
