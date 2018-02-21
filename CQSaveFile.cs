@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
@@ -17,6 +19,10 @@ namespace WPF_LogicSimulation
         [XmlArray("Lines")]
         [XmlArrayItem("Line")]
         public List<CQSaveFile_Line> Lines { set; get; }
+        [XmlElement("Snapshot")]
+        public byte[] SnapshotRaw { set; get; }
+        [XmlIgnore]
+        public BitmapImage Snapshot { set; get; }
         public CQSaveFile()
         {
             this.Gates = new List<CQSaveFile_Gate>();

@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <ComboBox x:Name="combobox_gate" SelectedIndex="0">
@@ -19,12 +20,34 @@
                 <ComboBoxItem>LED</ComboBoxItem>
             </ComboBox>
             <Button x:Name="button_addgate" Click="button_addgate_Click">Add</Button>
+            <TextBox x:Name="textbox_savename" Text="QQ" Width="60"/>
             <Button x:Name="button_save" Click="button_save_Click">Save</Button>
             <Button x:Name="button_load" Click="button_load_Click">Load</Button>
             <Button x:Name="button_clear" Click="button_clear_Click">Clear</Button>
             <ToggleButton x:Name="togglebutton_simulation" Click="togglebutton_simulation_Click">Simulatione</ToggleButton>
         </StackPanel>
-        <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp"/>
-
+        <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp">
+        </Canvas>
+        <ListBox ItemsSource="{Binding SaveFiles}" Grid.Row="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Green" BorderThickness="1">
+                        <StackPanel>
+                            <Image Source="{Binding Snapshot}" Height="50">
+                                <Image.ToolTip>
+                                    <Image Source="{Binding Snapshot}"/>
+                                </Image.ToolTip>
+                            </Image>
+                            <TextBlock Text="QQ" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Window>

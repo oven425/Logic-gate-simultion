@@ -175,6 +175,12 @@ namespace WPF_LogicSimulation
         string m_ID;
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
+        public override string ToString()
+        {
+            return string.Format("Type:{0} ID:{1}"
+                , this.Type
+                , this.ID);
+        }
     }
 
     public class CQGateUI : CQGateBaseUI
@@ -197,14 +203,17 @@ namespace WPF_LogicSimulation
         public int Index { set; get; }
         public Point ConnectPoint { set; get; }
         bool m_IsEnableSimulate;
+        bool m_IsTrue;
+        public bool IsTrue { set { this.m_IsTrue = value; this.Update("IsTrue"); } get { return this.m_IsTrue; } }
         public bool IsEnableSimulate { set { this.m_IsEnableSimulate = value; this.Update("IsEnableSimulate"); } get { return this.m_IsEnableSimulate; } }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
         public override string ToString()
         {
-            return string.Format("Index:{0} Index:{1} ConnectPoint:{2}"
+            return string.Format("Index:{0} Index:{1} IsTrue:{2} ConnectPoint:{3}"
                 , this.Type
                 , this.Index
+                , this.IsTrue
                 , this.ConnectPoint);
         }
     }

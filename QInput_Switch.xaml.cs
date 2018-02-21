@@ -121,7 +121,12 @@ namespace WPF_LogicSimulation
 
         private void toggglebutton_switch_Click(object sender, RoutedEventArgs e)
         {
-            this.textblock_state.Text = this.toggglebutton_switch.IsChecked == true ? "On" : "False";
+            this.textblock_state.Text = this.toggglebutton_switch.IsChecked == true ? "On" : "Off";
+            CQGateBaseUI gateui = this.DataContext as CQGateBaseUI;
+            for(int i=0; i<gateui.Pin_out.Count; i++)
+            {
+                gateui.Pin_out[i].IsTrue = this.toggglebutton_switch.IsChecked == true;
+            }
         }
 
         private void rectangle_MouseDown(object sender, MouseButtonEventArgs e)

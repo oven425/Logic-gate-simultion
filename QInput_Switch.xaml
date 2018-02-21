@@ -9,6 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <src:CQBool2Brush x:Key="bool2brush" True="Orange" False="Black"/>
+        <src:CQBool2Brush x:Key="bool2brush_endpoint" True="LightGreen" False="White"/>
         <src:CQBoolVisibility x:Key="bool2visibility"/>
         <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
@@ -32,7 +33,7 @@
         <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="1" HorizontalAlignment="Left">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Rectangle x:Name="rectangle" Fill="White" Stroke="Black" MouseDown="rectangle_MouseDown"  MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Height="10" Width="10" StrokeThickness="1"/>
+                    <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" Stroke="Black" MouseDown="rectangle_MouseDown"  MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Height="10" Width="10" StrokeThickness="1"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

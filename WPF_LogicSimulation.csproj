@@ -48,6 +48,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CQMainUI.cs" />
     <Compile Include="CQSaveFile.cs" />
     <Compile Include="CQSimulateData.cs" />
     <Compile Include="QGate.xaml.cs">

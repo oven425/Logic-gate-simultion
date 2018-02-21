@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using WPF_LogicSimulation.UIData;
 
 namespace WPF_LogicSimulation
 {
@@ -34,11 +35,19 @@ namespace WPF_LogicSimulation
 
         private void M_Thread_Sim_DoWork(object sender, DoWorkEventArgs e)
         {
-            while(true)
+            while(this.m_IsStartSimulate == true)
             {
                 try
                 {
-                    
+                    for(int i= 0; i<this.m_Simulate.Count; i++)
+                    {
+                        List<CQSimulateData> temp = this.m_Simulate[i].Nexts;
+                        foreach(CQSimulateData sud in temp)
+                        {
+                            sud.GateData.Pin_in[sud.PinIndex].IsTrue = this.m_Simulate[i].GateData.Pin_out[this.m_Simulate[i].PinIndex].IsTrue;
+                        }
+                    }
+                    System.Threading.Thread.Sleep(100);
                 }
                 catch(Exception ee)
                 {
@@ -48,27 +57,38 @@ namespace WPF_LogicSimulation
             }
         }
 
+        CQMainUI m_MainUI;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //this.Add_AND(0, 0, "");
-            this.Add_AND(0, 0, "");
-            this.Add_NOT(0, 0, "");
-            this.Add_Input_Switch(0, 0, "");
+            //this.Add_AND(0, 0, "");
+            //this.Add_NOT(0, 0, "");
             //this.Add_Input_Switch(0, 0, "");
-            this.Add_LED(0, 0, "");
+            //this.Add_Input_Switch(0, 0, "");
+            //this.Add_LED(0, 0, "");
+
+            if(this.m_MainUI == null)
+            {
+                this.DataContext = this.m_MainUI = new CQMainUI();
+                //string[] str_files = Directory.GetFiles(System.Environment.CurrentDirectory, "*.txt");
+                //XmlSerializer xml = new XmlSerializer(typeof(CQSaveFile));
+                //using (FileStream fs = File.Open(str_files[0], FileMode.Open))
+                //{
+                //    CQSaveFile sv = (CQSaveFile)xml.Deserialize(fs);
+                //    sv.Snapshot = new BitmapImage();
+                //    sv.Snapshot.BeginInit();
+                //    sv.Snapshot.StreamSource = new MemoryStream(sv.SnapshotRaw);
+                //    sv.Snapshot.EndInit();
+                //    this.m_MainUI.SaveFiles.Add(sv);
+                //}
+            }
+            
+                
         }
         bool m_IsConnect;
         Line m_Line;
         private bool Ggate_OnPinMouseUp(QGate sender, CQPin pin, Point pt)
         {
-            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
-            //this.m_Line.X2 = pin.ConnectPoint.X;
-            //this.m_Line.Y2 = pin.ConnectPoint.Y;
-            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
-            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
-            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
-            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            //this.m_IsConnect = false;
             this.ConnectEnd(sender, pin, pt);
             return true;
         }
@@ -131,14 +151,6 @@ namespace WPF_LogicSimulation
 
         private bool Input_switch_OnPinMouseUp(QInput_Switch sender, CQPin pin, Point pt)
         {
-            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
-            //this.m_Line.X2 = pin.ConnectPoint.X;
-            //this.m_Line.Y2 = pin.ConnectPoint.Y;
-            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
-            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
-            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
-            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            //this.m_IsConnect = false;
             this.ConnectEnd(sender, pin, pt);
             return true;
         }
@@ -200,14 +212,6 @@ namespace WPF_LogicSimulation
 
         private bool Output_led_OnPinMouseUp(QOutput_LED sender, CQPin pin, Point pt)
         {
-            //CQGateBaseUI gateui = sender.DataContext as CQGateBaseUI;
-            //this.m_Line.X2 = pin.ConnectPoint.X;
-            //this.m_Line.Y2 = pin.ConnectPoint.Y;
-            //this.m_LineDatas[this.m_Line].End.GateID = gateui.ID;
-            //this.m_LineDatas[this.m_Line].End.Index = pin.Index;
-            //this.m_LineDatas[this.m_Line].End.Type = pin.Type;
-            //this.m_LineDatas[this.m_Line].End.EndType = CQSaveFile_LinePoint.EndTypes.End;
-            //this.m_IsConnect = false;
             this.ConnectEnd(sender, pin, pt);
             return true;
         }
@@ -522,8 +526,11 @@ namespace WPF_LogicSimulation
 
             }
             sv.Lines.AddRange(this.m_LineDatas.Values);
+            MemoryStream snapshot = this.Snapshot();
+            sv.SnapshotRaw = snapshot.ToArray();
             XmlSerializer xml = new XmlSerializer(typeof(CQSaveFile));
-            using (FileStream fs = new FileStream("QQ.txt", FileMode.Create))
+            string filename = this.textbox_savename.Text + ".txt";
+            using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
                 xml.Serialize(fs, sv);
             }
@@ -633,30 +640,46 @@ namespace WPF_LogicSimulation
                         int col = 1;
                         CQSimulateData sud = new CQSimulateData() { GateData = inputs[i].DataContext as CQInput_SwitchUI };
                         sud.GateData.IsSimulate = true;
+                        
                         List< CQSimulateData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
-                        sud.Nexts.AddRange(temp_suds);
-                        while(true)
+                        CQSimulateData find_sud = null;
+                        this.FindGate(temp_suds[0].GateData.ID, this.m_Simulate, out find_sud);
+                        if(find_sud == null)
                         {
-                            List<CQSimulateData> temp_suds_find = temp_suds.ToList();
-
-                            col = col + 1;
-                            bool isend = true;
-                            foreach (CQSimulateData simd in temp_suds_find)
+                            sud.Nexts.AddRange(temp_suds);
+                            while (true)
                             {
-                                temp_suds = this.FindNexts(simd.GateData.ID, col, gates1);
-                                if(temp_suds.Count > 0)
+                                List<CQSimulateData> temp_suds_find = temp_suds.ToList();
+
+                                col = col + 1;
+                                bool isend = true;
+                                foreach (CQSimulateData simd in temp_suds_find)
                                 {
-                                    isend = false;
-                                    simd.Nexts.AddRange(temp_suds);
-                                }
-                            }
-                            if(isend == true)
-                            {
-                                this.m_Simulate.Add(sud);
-                                
-                                break;
-                            }
+                                    temp_suds = this.FindNexts(simd.GateData.ID, col, gates1);
+                                    if (temp_suds.Count > 0)
+                                    {
+                                        isend = false;
+                                        if (i > 0)
+                                        {
 
+                                        }
+                                        simd.Nexts.AddRange(temp_suds);
+                                    }
+                                }
+                                if (isend == true)
+                                {
+                                    this.m_Simulate.Add(sud);
+
+                                    break;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            sud.Nexts.Add(find_sud);
+                            this.m_Simulate.Add(sud);
+                            break;
                         }
                         
 
@@ -681,41 +704,62 @@ namespace WPF_LogicSimulation
                     }
                 }
             }
+            if(this.m_Simulate.Count > 0)
+            {
+                if(this.m_Thread_Sim.IsBusy == false)
+                {
+                    this.m_IsStartSimulate = true;
+                    this.m_Thread_Sim.RunWorkerAsync();
+                }
+            }
         }
 
-        bool FindGate(string id, List<CQSimulateData> src)
+        bool FindGate(string id, List<CQSimulateData> src, out CQSimulateData dst)
         {
+            dst = null;
             bool result = false;
             List<CQSimulateData> temp;
-            for(int i=0; i<src.Count; i++)
+            for (int i = 0; i < src.Count; i++)
             {
+
                 temp = src[i].Nexts;
                 bool isend = false;
-                while(true)
+                var hr1 = temp.FirstOrDefault(x => x.GateData.ID == id);
+                if (hr1 != null)
                 {
-                    if(temp.All(x=>x.Nexts.Count==0) == true)
+                    dst = hr1;
+                    isend = true;
+                    break;
+                }
+                else
+                {
+                    while (true)
                     {
-                        isend = true;
-                    }
-                    else
-                    {
-                        //var hr = temp.Nexts.FirstOrDefault(x => x.GateData.ID == id);
-                        //if (hr != null)
-                        //{
-                        //    isend = true;
-                        //    break;
-                        //}
-                    }
-                    
-                    if (isend == true)
-                    {
-                        break;
+                        if (temp.All(x => x.Nexts.Count == 0) == true)
+                        {
+                            isend = true;
+                        }
+                        else
+                        {
+                            var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.GateData.ID == id);
+                            if (hr != null)
+                            {
+                                isend = true;
+                                break;
+                            }
+                        }
+
+                        if (isend == true)
+                        {
+                            break;
+                        }
                     }
                 }
+                
             }
             return result;
         }
-
+        bool m_IsStartSimulate = false;
         List<CQSimulateData> FindNexts(string id, int col, List<FrameworkElement> gates)
         {
             List<CQSimulateData> suds = new List<CQSimulateData>();
@@ -730,6 +774,7 @@ namespace WPF_LogicSimulation
                 {
                     sud1 = new CQSimulateData();
                     sud1.Col = col++;
+                    sud1.PinIndex = line.End.Index;
                     sud1.GateData = gateui;
                     sud1.GateData.IsSimulate = true;
                     suds.Add(sud1);
@@ -815,6 +860,18 @@ namespace WPF_LogicSimulation
         private void button_clear_Click(object sender, RoutedEventArgs e)
         {
             this.ClearGate();
+        }
+
+        MemoryStream Snapshot()
+        {
+            MemoryStream mm = new MemoryStream();
+            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)this.canvas.ActualWidth, (int)this.canvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bitmap.Render(this.canvas);
+
+            PngBitmapEncoder image = new PngBitmapEncoder();
+            image.Frames.Add(BitmapFrame.Create(bitmap));
+            image.Save(mm);
+            return mm;
         }
     }
 }
