@@ -77,13 +77,6 @@ namespace WPF_LogicSimulation
         CQMainUI m_MainUI;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //this.Add_AND(0, 0, "");
-            //this.Add_AND(0, 0, "");
-            //this.Add_NOT(0, 0, "");
-            //this.Add_Input_Switch(0, 0, "");
-            //this.Add_Input_Switch(0, 0, "");
-            //this.Add_LED(0, 0, "");
-
             if(this.m_MainUI == null)
             {
                 this.DataContext = this.m_MainUI = new CQMainUI();
@@ -662,7 +655,7 @@ namespace WPF_LogicSimulation
                         
                         List< CQSimulateData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
                         CQSimulateData find_sud = null;
-                        this.FindGate(temp_suds[0].GateData.ID, this.m_Simulate, out find_sud);
+                        this.FindGate(temp_suds[0], this.m_Simulate, out find_sud);
                         if(find_sud == null)
                         {
                             sud.Nexts.AddRange(temp_suds);
@@ -696,6 +689,7 @@ namespace WPF_LogicSimulation
                         }
                         else
                         {
+                            find_sud.PinIndex = temp_suds[0].PinIndex;
                             sud.Nexts.Add(find_sud);
                             this.m_Simulate.Add(sud);
                             break;
@@ -733,7 +727,7 @@ namespace WPF_LogicSimulation
             }
         }
 
-        bool FindGate(string id, List<CQSimulateData> src, out CQSimulateData dst)
+        bool FindGate(CQSimulateData sd, List<CQSimulateData> src, out CQSimulateData dst)
         {
             dst = null;
             bool result = false;
@@ -743,7 +737,7 @@ namespace WPF_LogicSimulation
 
                 temp = src[i].Nexts;
                 bool isend = false;
-                var hr1 = temp.FirstOrDefault(x => x.GateData.ID == id);
+                var hr1 = temp.FirstOrDefault(x => x.GateData.ID == sd.GateData.ID);
                 if (hr1 != null)
                 {
                     dst = hr1;
@@ -760,7 +754,7 @@ namespace WPF_LogicSimulation
                         }
                         else
                         {
-                            var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.GateData.ID == id);
+                            var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.GateData.ID == sd.GateData.ID);
                             if (hr != null)
                             {
                                 isend = true;
