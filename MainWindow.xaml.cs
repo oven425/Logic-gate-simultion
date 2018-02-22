@@ -48,14 +48,14 @@ namespace WPF_LogicSimulation
                         {
                             foreach(CQSimulateData parent in temp_parent)
                             {
-                                foreach (CQSimulateData sud in parent.Nexts)
+                                foreach (var sud in parent.Nexts)
                                 {
-                                    sud.GateData.Pin_in[sud.PinIndex].IsTrue = parent.GateData.Pin_out[parent.PinIndex].IsTrue;
-                                    sud.GateData.Process();
+                                    sud.Key.GateData.Pin_in[sud.Value.Destination].IsTrue = parent.GateData.Pin_out[sud.Value.Source].IsTrue;
+                                    sud.Key.GateData.Process();
                                 }
                             }
 
-                            temp_parent = temp_parent.SelectMany(x => x.Nexts).ToList();
+                            temp_parent = temp_parent.SelectMany(x => x.Nexts.Keys).ToList();
                             //temp_parent = temp;
                             if (temp_parent.Count == 0)
                             {
@@ -653,15 +653,19 @@ namespace WPF_LogicSimulation
                         CQSimulateData sud = new CQSimulateData() { GateData = inputs[i].DataContext as CQInput_SwitchUI };
                         sud.GateData.IsSimulate = true;
                         
-                        List< CQSimulateData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
+                        Dictionary< CQSimulateData, CQSimlateEndData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
                         CQSimulateData find_sud = null;
-                        this.FindGate(temp_suds[0], this.m_Simulate, out find_sud);
+                        this.FindGate(temp_suds.ElementAt(0).Key, this.m_Simulate, out find_sud);
                         if(find_sud == null)
                         {
-                            sud.Nexts.AddRange(temp_suds);
+                            foreach(var vvv1 in temp_suds)
+                            {
+                                sud.Nexts.Add(vvv1.Key, vvv1.Value);
+                            }
+                            //sud.Nexts.AddRange(temp_suds);
                             while (true)
                             {
-                                List<CQSimulateData> temp_suds_find = temp_suds.ToList();
+                                List<CQSimulateData> temp_suds_find = temp_suds.Keys.ToList();
 
                                 col = col + 1;
                                 bool isend = true;
@@ -675,7 +679,11 @@ namespace WPF_LogicSimulation
                                         {
 
                                         }
-                                        simd.Nexts.AddRange(temp_suds);
+                                        foreach (var vvv1 in temp_suds)
+                                        {
+                                            simd.Nexts.Add(vvv1.Key, vvv1.Value);
+                                        }
+                                        //simd.Nexts.AddRange(temp_suds);
                                     }
                                 }
                                 if (isend == true)
@@ -689,8 +697,12 @@ namespace WPF_LogicSimulation
                         }
                         else
                         {
-                            find_sud.PinIndex = temp_suds[0].PinIndex;
-                            sud.Nexts.Add(find_sud);
+                            //find_sud.PinIndex = temp_suds[0].PinIndex;
+                            //sud.Nexts.Add(find_sud);
+                            foreach (var vvv1 in temp_suds)
+                            {
+                                sud.Nexts.Add(vvv1.Key, vvv1.Value);
+                            }
                             this.m_Simulate.Add(sud);
                             break;
                         }
@@ -735,7 +747,7 @@ namespace WPF_LogicSimulation
             for (int i = 0; i < src.Count; i++)
             {
 
-                temp = src[i].Nexts;
+                temp = src[i].Nexts.Keys.ToList();
                 bool isend = false;
                 var hr1 = temp.FirstOrDefault(x => x.GateData.ID == sd.GateData.ID);
                 if (hr1 != null)
@@ -754,8 +766,8 @@ namespace WPF_LogicSimulation
                         }
                         else
                         {
-                            var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.GateData.ID == sd.GateData.ID);
-                            if (hr != null)
+                            var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.Key.GateData.ID == sd.GateData.ID);
+                            if (hr.Key != null)
                             {
                                 isend = true;
                                 break;
@@ -773,9 +785,9 @@ namespace WPF_LogicSimulation
             return result;
         }
         bool m_IsStartSimulate = false;
-        List<CQSimulateData> FindNexts(string id, int col, List<FrameworkElement> gates)
+        Dictionary<CQSimulateData, CQSimlateEndData> FindNexts(string id, int col, List<FrameworkElement> gates)
         {
-            List<CQSimulateData> suds = new List<CQSimulateData>();
+            Dictionary<CQSimulateData, CQSimlateEndData> suds = new Dictionary<CQSimulateData, CQSimlateEndData>();
             var v1 = this.m_LineDatas.Values.Where(x => x.Begin.GateID == id);
             CQSimulateData sud1;
             foreach (CQSaveFile_Line line in v1)
@@ -787,10 +799,10 @@ namespace WPF_LogicSimulation
                 {
                     sud1 = new CQSimulateData();
                     sud1.Col = col++;
-                    sud1.PinIndex = line.End.Index;
+                    //sud1.PinIndex = line.End.Index;
                     sud1.GateData = gateui;
                     sud1.GateData.IsSimulate = true;
-                    suds.Add(sud1);
+                    suds.Add(sud1, new CQSimlateEndData(line.Begin.Index, line.End.Index));
                 }
 
             }
