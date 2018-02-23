@@ -211,6 +211,14 @@ namespace WPF_LogicSimulation
             this.Logic.Add("11", "1");
         }
 
+        public void CreateOR()
+        {
+            this.Logic.Add("00", "0");
+            this.Logic.Add("01", "1");
+            this.Logic.Add("10", "1");
+            this.Logic.Add("11", "1");
+        }
+
         public Dictionary<string, string> Logic { set; get; }
 
         public override bool Process()

@@ -296,6 +296,30 @@ namespace WPF_LogicSimulation
             this.canvas.Children.Add(ggate);
         }
 
+        void Add_OR(double x = 0, double y = 0, string id = "")
+        {
+            CQGateUI cc = null;
+            QGate ggate = null;
+            cc = new CQGateUI();
+            cc.GateName = "OR";
+            cc.Type = "OR";
+            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index = 0 });
+            cc.Pin_in.Add(new CQPin() { Type = CQPin.Types.IN, Index = 1 });
+            cc.Pin_out.Add(new CQPin() { Type = CQPin.Types.OUT });
+            cc.CreateOR();
+            ggate = new QGate();
+            ggate.Height = 50;
+            ggate.Width = 80;
+            cc.ID = id;
+            Canvas.SetLeft(ggate, x);
+            Canvas.SetTop(ggate, y);
+            ggate.DataContext = cc;
+            ggate.OnPinMouseDwon += Ggate_OnPinMouseDwon;
+            ggate.OnPinMouseUp += Ggate_OnPinMouseUp;
+            ggate.OnGateMove += Ggate_OnGateMove;
+            this.canvas.Children.Add(ggate);
+        }
+
         void Add_AND(double x=0, double y=0, string id="")
         {
             CQGateUI cc = null;
@@ -577,6 +601,11 @@ namespace WPF_LogicSimulation
                                 this.Add_NOT(gate.X, gate.Y, gate.ID);
                             }
                             break;
+                        case "OR":
+                            {
+                                this.Add_OR(gate.X, gate.Y, gate.ID);
+                            }
+                            break;
                         case "Switch":
                             {
                                 this.Add_Input_Switch(gate.X, gate.Y, gate.ID);
@@ -704,7 +733,7 @@ namespace WPF_LogicSimulation
                                 sud.Nexts.Add(vvv1.Key, vvv1.Value);
                             }
                             this.m_Simulate.Add(sud);
-                            break;
+                            //break;
                         }
                         
 
@@ -727,6 +756,7 @@ namespace WPF_LogicSimulation
                         CQGateBaseUI gateui = vv.DataContext as CQGateBaseUI;
                         gateui.IsSimulate = false;
                     }
+                    this.m_Simulate.Clear();
                 }
             }
             if(this.m_Simulate.Count > 0)
@@ -769,6 +799,7 @@ namespace WPF_LogicSimulation
                             var hr = temp.SelectMany(x => x.Nexts).FirstOrDefault(x => x.Key.GateData.ID == sd.GateData.ID);
                             if (hr.Key != null)
                             {
+                                dst = hr.Key;
                                 isend = true;
                                 break;
                             }
@@ -861,6 +892,11 @@ namespace WPF_LogicSimulation
                 case "AND":
                     {
                         this.Add_AND();
+                    }
+                    break;
+                case "OR":
+                    {
+                        this.Add_OR();
                     }
                     break;
                 case "SWITCH":

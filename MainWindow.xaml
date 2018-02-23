@@ -16,6 +16,7 @@
             <ComboBox x:Name="combobox_gate" SelectedIndex="0">
                 <ComboBoxItem>NOT</ComboBoxItem>
                 <ComboBoxItem>AND</ComboBoxItem>
+                <ComboBoxItem>OR</ComboBoxItem>
                 <ComboBoxItem>Switch</ComboBoxItem>
                 <ComboBoxItem>LED</ComboBoxItem>
             </ComboBox>
