@@ -684,7 +684,11 @@ namespace WPF_LogicSimulation
                         
                         Dictionary< CQSimulateData, CQSimlateEndData> temp_suds = this.FindNexts(sud.GateData.ID, col, gates1);
                         CQSimulateData find_sud = null;
-                        this.FindGate(temp_suds.ElementAt(0).Key, this.m_Simulate, out find_sud);
+                        if(temp_suds.Count > 0)
+                        {
+                            this.FindGate(temp_suds.ElementAt(0).Key, this.m_Simulate, out find_sud);
+                        }
+                        
                         if(find_sud == null)
                         {
                             foreach(var vvv1 in temp_suds)
