@@ -18,6 +18,12 @@ namespace WPF_LogicSimulation
         }
         public int Source { set; get; }
         public int Destination { set; get; }
+        public override string ToString()
+        {
+            return string.Format("Src:{0} Dst:{1}"
+                , this.Source
+                , this.Destination);
+        }
     }
     public class CQSimulateData
     {

@@ -745,6 +745,7 @@ namespace WPF_LogicSimulation
                 }
                 else
                 {
+                    this.m_IsStartSimulate = false;
                     foreach(var vv in gates)
                     {
                         CQGateBaseUI gateui = vv.DataContext as CQGateBaseUI;
@@ -806,6 +807,10 @@ namespace WPF_LogicSimulation
                                 dst = hr.Key;
                                 isend = true;
                                 break;
+                            }
+                            else
+                            {
+                                temp = temp.Select(x => x.Nexts.Keys.ToList()).ElementAt(0);
                             }
                         }
 
