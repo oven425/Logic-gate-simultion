@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_LogicSimulation"
         mc:Ignorable="d"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid x:Name="grid">
         <Grid.RowDefinitions>
@@ -28,6 +29,11 @@
             <ToggleButton x:Name="togglebutton_simulation" Click="togglebutton_simulation_Click">Simulatione</ToggleButton>
         </StackPanel>
         <Canvas x:Name="canvas" Background="Transparent" Grid.Row="1" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" MouseUp="canvas_MouseUp">
+            <!--<Rectangle Width="100" Height="100" StrokeDashCap="Square" Stroke="Black" StrokeThickness="1">
+                <Rectangle.StrokeDashArray>
+                    <sys:Double>5</sys:Double>
+                </Rectangle.StrokeDashArray>
+            </Rectangle>-->
         </Canvas>
         <ListBox ItemsSource="{Binding SaveFiles}" Grid.Row="2">
             <ListBox.ItemTemplate>
