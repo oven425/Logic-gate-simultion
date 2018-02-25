@@ -461,6 +461,9 @@ namespace WPF_LogicSimulation
         Point m_DragOffset;
         QInput_Switch m_DragInputSwitch;
         QOutput_LED m_DragOutputLED;
+        Point m_SelectPt;
+        bool m_IsSelect;
+        Rectangle m_SelectRect;
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.Source is QGate)
@@ -482,6 +485,21 @@ namespace WPF_LogicSimulation
                 this.m_DragOutputLED = e.Source as QOutput_LED;
                 this.m_IsDrag = true;
                 this.m_DragOffset = e.GetPosition(this.m_DragOutputLED);
+                this.canvas.CaptureMouse();
+            }
+            else
+            {
+                this.m_SelectPt = e.GetPosition(this.canvas);
+                this.m_SelectRect = new Rectangle();
+                //rectangle.Width = 100;
+                //rectangle.Height = 100;
+                this.m_SelectRect.Stroke = Brushes.Black;
+                this.m_SelectRect.StrokeDashArray.Add(6);
+                this.m_SelectRect.StrokeDashCap = PenLineCap.Square;
+                this.canvas.Children.Add(this.m_SelectRect);
+                Canvas.SetLeft(this.m_SelectRect, this.m_SelectPt.X);
+                Canvas.SetTop(this.m_SelectRect, this.m_SelectPt.Y);
+                this.m_IsSelect = true;
                 this.canvas.CaptureMouse();
             }
         }
@@ -531,6 +549,20 @@ namespace WPF_LogicSimulation
                 }
                 
             }
+            else if(this.m_IsSelect == true)
+            {
+                Point pt = e.GetPosition(this.canvas);
+                if(pt.X < this.m_SelectPt.X)
+                {
+                    Canvas.SetLeft(this.m_SelectRect, pt.X);
+                }
+                if (pt.Y < this.m_SelectPt.Y)
+                {
+                    Canvas.SetTop(this.m_SelectRect, pt.Y);
+                }
+                this.m_SelectRect.Width = Math.Abs(pt.X - this.m_SelectPt.X);
+                this.m_SelectRect.Height = Math.Abs(pt.Y - this.m_SelectPt.Y);
+            }
         }
 
         private void canvas_MouseUp(object sender, MouseButtonEventArgs e)
@@ -541,6 +573,13 @@ namespace WPF_LogicSimulation
                 this.canvas.ReleaseMouseCapture();
                 this.m_DragGate = null;
                 this.m_DragInputSwitch = null;
+            }
+            else if(this.m_IsSelect == true)
+            {
+                this.m_IsSelect = false;
+                this.canvas.Children.Remove(this.m_SelectRect);
+                this.m_SelectRect = null;
+                this.canvas.ReleaseMouseCapture();
             }
         }
 

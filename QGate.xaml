@@ -13,38 +13,40 @@
         <src:CQBoolVisibility x:Key="bool2visibility"/>
         <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1">
-                    </Rectangle>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="1"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <Rectangle Fill="Wheat" Grid.Column="1" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
-        <TextBlock Text="{Binding GateName}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" Stroke="Black" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Height="10" Width="10" StrokeThickness="1"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="1"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </Grid>
+    <Border BorderThickness="1" BorderBrush="Red">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Stroke="Black" Height="10" Width="10" StrokeThickness="1">
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Rectangle Fill="Wheat" Grid.Column="1" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
+            <TextBlock Text="{Binding GateName}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" Stroke="Black" MouseDown="Rectangle_MouseDown" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp" Height="10" Width="10" StrokeThickness="1"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+    </Border>
 </UserControl>
