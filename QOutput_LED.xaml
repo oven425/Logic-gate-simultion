@@ -14,34 +14,36 @@
         <src:CQBoolVisibility x:Key="bool2visibility"/>
         <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" MouseDown="rectangle_MouseDown" MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Stroke="Black" Height="10" Width="10" StrokeThickness="1">
-                    </Rectangle>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="1"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <Grid Grid.Column="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
-                <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
-                <Ellipse Grid.Row="1" Fill="{Binding Pin_in[0].IsTrue, Converter={StaticResource bool2brush_simulate}}" Margin="5,0,5,0"/>
+    <Border BorderThickness="1" BorderBrush="Red">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ItemsControl x:Name="itemscontrol_in" ItemsSource="{Binding Pin_in}" HorizontalAlignment="Right">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" MouseDown="rectangle_MouseDown" MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Stroke="Black" Height="10" Width="10" StrokeThickness="1">
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Grid Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
+                    <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                    <Ellipse Grid.Row="1" Fill="{Binding Pin_in[0].IsTrue, Converter={StaticResource bool2brush_simulate}}" Margin="5,0,5,0"/>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

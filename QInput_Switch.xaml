@@ -13,34 +13,36 @@
         <src:CQBoolVisibility x:Key="bool2visibility"/>
         <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+    <Border BorderThickness="1" BorderBrush="Red">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
-            <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
-            <ToggleButton x:Name="toggglebutton_switch" Margin="8,5,8,5" Grid.Row="1" Click="toggglebutton_switch_Click">
-                <TextBlock x:Name="textblock_state" Text="False"/>
-            </ToggleButton>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Rectangle Fill="Wheat" Grid.Column="1" Grid.RowSpan="2" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
+                <TextBlock Text="{Binding GateName}" Margin="0,3,0,0" HorizontalAlignment="Center"/>
+                <ToggleButton x:Name="toggglebutton_switch" Margin="8,5,8,5" Grid.Row="1" Click="toggglebutton_switch_Click">
+                    <TextBlock x:Name="textblock_state" Text="False"/>
+                </ToggleButton>
+            </Grid>
+
+            <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="1" HorizontalAlignment="Left">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" Stroke="Black" MouseDown="rectangle_MouseDown"  MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Height="10" Width="10" StrokeThickness="1"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </Grid>
-        
-        <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="1" HorizontalAlignment="Left">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Rectangle x:Name="rectangle" Fill="{Binding IsTrue, Converter={StaticResource bool2brush_endpoint}}" Stroke="Black" MouseDown="rectangle_MouseDown"  MouseLeftButtonUp="rectangle_MouseLeftButtonUp"  Height="10" Width="10" StrokeThickness="1"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="1"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </Grid>
+    </Border>
 </UserControl>
