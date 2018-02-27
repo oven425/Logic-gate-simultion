@@ -576,6 +576,26 @@ namespace WPF_LogicSimulation
             }
             else if(this.m_IsSelect == true)
             {
+                
+
+                Point pt = new Point(Canvas.GetLeft(this.m_SelectRect), Canvas.GetTop(this.m_SelectRect));
+                Size sz = new Size(this.m_SelectRect.Width, this.m_SelectRect.Height);
+                Rect selectrc = new Rect(pt, sz);
+                foreach(FrameworkElement child in this.canvas.Children)
+                {
+                    double left = Canvas.GetLeft(child);
+                    double right = Canvas.GetRight(child);
+                    double top= Canvas.GetTop(child);
+                    double bottom = Canvas.GetBottom(child);
+                    Rect rc_gate = new Rect(new Point(left, top), new Size(child.Width, child.Height));
+                    bool is_select = selectrc.Contains(rc_gate);
+                    CQGateBaseUI gateui = child.DataContext as CQGateBaseUI;
+                    if(gateui  != null)
+                    {
+                        gateui.IsSelected = is_select;
+                    }
+                }
+
                 this.m_IsSelect = false;
                 this.canvas.Children.Remove(this.m_SelectRect);
                 this.m_SelectRect = null;

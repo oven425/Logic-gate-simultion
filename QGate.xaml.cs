@@ -167,16 +167,19 @@ namespace WPF_LogicSimulation
         public string GateName { set; get; }
         bool m_IsSimulate;
         string m_ID;
+        bool m_IsSelected;
+        public CQGateBaseUI()
+        {
+            this.m_IsSelected = false;
+        }
         public string ID
         {
             set { this.m_ID = value; }
             get { if (string.IsNullOrEmpty(this.m_ID) == true) { this.m_ID = Guid.NewGuid().ToString(); } return this.m_ID; }
         }
         public bool IsSimulate { set { this.m_IsSimulate = value; this.Update("IsSimulate"); } get { return this.m_IsSimulate; } }
-        public virtual bool Process()
-        {
-            return true;
-        }
+        public bool IsSelected { set { this.m_IsSelected = value; this.Update("IsSelected"); } get { return this.m_IsSelected; } }
+        public virtual bool Process() { return true; }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Update(string name) { if (this.PropertyChanged != null) { this.PropertyChanged(this, new PropertyChangedEventArgs(name)); } }
         public override string ToString()

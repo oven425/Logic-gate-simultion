@@ -13,7 +13,7 @@
         <src:CQBoolVisibility x:Key="bool2visibility"/>
         <src:CQBool2Thickness x:Key="bool2thickness"/>
     </UserControl.Resources>
-    <Border BorderThickness="1" BorderBrush="Red">
+    <Border BorderThickness="{Binding IsSelected,Converter={StaticResource bool2thickness}}" BorderBrush="Red">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

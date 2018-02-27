@@ -36,8 +36,8 @@ namespace WPF_LogicSimulation
         public Thickness False { set; get; }
         public CQBool2Thickness()
         {
-            this.False = new Thickness(1);
-            this.True = new Thickness(2);
+            this.False = new Thickness(0);
+            this.True = new Thickness(1);
         }
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
