@@ -764,8 +764,21 @@ namespace WPF_LogicSimulation
                                 foreach (CQSimulateData simd in temp_suds_find)
                                 {
                                     temp_suds = this.FindNexts(simd.GateData.ID, col, gates1);
+                                    
                                     if (temp_suds.Count > 0)
                                     {
+                                        
+                                        foreach(CQSimulateData ssd in temp_suds.Keys)
+                                        {
+                                            CQSimulateData oip;
+                                            this.FindGate(ssd,new List<CQSimulateData>() { sud }, out oip);
+                                            if(oip != null)
+                                            {
+                                                System.Diagnostics.Trace.WriteLine("");
+                                            }
+
+                                        }
+
                                         isend = false;
                                         if (i > 0)
                                         {
