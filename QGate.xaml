@@ -33,8 +33,18 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
+            
             <Rectangle Fill="Wheat" Grid.Column="1" Stroke="{Binding IsSimulate, Converter={StaticResource bool2brush}}" StrokeThickness="{Binding IsSimulate,Converter={StaticResource bool2thickness}}"/>
-            <TextBlock Text="{Binding GateName}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding Type}" Grid.Column="1"/>
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="("/>
+                    <TextBlock Text="{Binding GateName}"/>
+                    <TextBlock Text=")"/>
+                </StackPanel>
+            </StackPanel>
+            
+            
             <ItemsControl x:Name="itemscontrol_out" ItemsSource="{Binding Pin_out}" Grid.Column="2" HorizontalAlignment="Left">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
