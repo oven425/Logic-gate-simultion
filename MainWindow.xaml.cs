@@ -767,28 +767,31 @@ namespace WPF_LogicSimulation
                                     
                                     if (temp_suds.Count > 0)
                                     {
-                                        
-                                        foreach(CQSimulateData ssd in temp_suds.Keys)
+                                        isend = false;
+                                        foreach (CQSimulateData ssd in temp_suds.Keys)
                                         {
                                             CQSimulateData oip;
                                             this.FindGate(ssd,new List<CQSimulateData>() { sud }, out oip);
                                             if(oip != null)
                                             {
+                                                
+                                                var v1_begin = this.m_LineDatas.Values.Where(x => x.End.GateID == ssd.GateData.ID);
+                                                var v1_end = this.m_LineDatas.Values.Where(x => x.Begin.GateID == ssd.GateData.ID);
+                                                ssd.Nexts.Add(oip, new CQSimlateEndData(v1_begin.First().End.Index, v1_end.First().Begin.Index));
+                                                isend = true;
                                                 System.Diagnostics.Trace.WriteLine("");
                                             }
 
                                         }
 
-                                        isend = false;
-                                        if (i > 0)
+                                        
+                                        if(isend == false)
                                         {
-
-                                        }
-                                        foreach (var vvv1 in temp_suds)
-                                        {
-                                            simd.Nexts.Add(vvv1.Key, vvv1.Value);
-                                        }
-                                        //simd.Nexts.AddRange(temp_suds);
+                                            foreach (var vvv1 in temp_suds)
+                                            {
+                                                simd.Nexts.Add(vvv1.Key, vvv1.Value);
+                                            }
+                                        }                                        
                                     }
                                 }
                                 if (isend == true)
