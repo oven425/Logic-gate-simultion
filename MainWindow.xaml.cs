@@ -573,11 +573,18 @@ namespace WPF_LogicSimulation
                 this.canvas.ReleaseMouseCapture();
                 this.m_DragGate = null;
                 this.m_DragInputSwitch = null;
+
+            }
+            else if(this.m_IsConnect == true)
+            {
+                this.canvas.Children.Remove(this.m_Line);
+                this.m_LineDatas.Remove(this.m_Line);
+                this.m_Line = null;
+                this.m_IsConnect = false;
+                this.canvas.ReleaseMouseCapture();
             }
             else if(this.m_IsSelect == true)
             {
-                
-
                 Point pt = new Point(Canvas.GetLeft(this.m_SelectRect), Canvas.GetTop(this.m_SelectRect));
                 Size sz = new Size(this.m_SelectRect.Width, this.m_SelectRect.Height);
                 Rect selectrc = new Rect(pt, sz);
@@ -624,7 +631,7 @@ namespace WPF_LogicSimulation
             MemoryStream snapshot = this.Snapshot();
             sv.SnapshotRaw = snapshot.ToArray();
             XmlSerializer xml = new XmlSerializer(typeof(CQSaveFile));
-            string filename = this.textbox_savename.Text + ".txt";
+            string filename = string.Format("{0}.txt", this.textbox_savename.Text);
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
                 xml.Serialize(fs, sv);

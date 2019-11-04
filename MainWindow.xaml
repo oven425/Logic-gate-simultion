@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_LogicSimulation"
         mc:Ignorable="d"
+        SnapsToDevicePixels="True"
         xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
     <Grid x:Name="grid">
